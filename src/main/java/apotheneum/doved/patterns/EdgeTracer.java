@@ -62,6 +62,9 @@ public class EdgeTracer extends ApotheneumPattern {
         new CompoundParameter("Brightness", 1, 0, 1)
         .setDescription("Brightness of the trace");
     
+    // Pre-allocated collections for performance
+    private final List<LXPoint> activePointsBuffer = new ArrayList<>();
+    
     private List<LXPoint> cylinderBottomPath;
     private List<LXPoint> cylinderBottomPathInterior;
     private List<LXPoint> cubeBottomPath;
@@ -98,57 +101,158 @@ public class EdgeTracer extends ApotheneumPattern {
         buildCubeFacePathsInterior();
     }
     
+    // Door handling utility methods
+    private static class DoorTraversal {
+        
+        static void addPointsWithDoorHandling(List<LXPoint> path, LXModel[] columns, 
+                                             Apotheneum.Orientation orientation, int faceOffset, 
+                                             int heightConstant, int doorHeight) {
+            for (int col = 0; col < columns.length; col++) {
+                int globalCol = faceOffset + col;
+                int available = orientation.available(globalCol);
+                LXModel column = columns[col];
+                
+                boolean isInDoor = available < heightConstant;
+                boolean nextInDoor = (col < columns.length - 1) && 
+                                   (orientation.available(faceOffset + col + 1) < heightConstant);
+                
+                if (!isInDoor) {
+                    // Normal bottom edge - add the bottom point
+                    path.add(column.points[column.points.length - 1]);
+                    
+                    // If next column is a door, add the vertical going up
+                    if (nextInDoor) {
+                        addVerticalTransition(path, column, heightConstant, doorHeight);
+                    }
+                } else {
+                    // We're in a door column
+                    if (available > 0) {
+                        // Add the bottom-most available point (top of door opening)
+                        path.add(column.points[available - 1]);
+                    }
+                    
+                    // If this is the last door column, add the descent
+                    if (!nextInDoor && col < columns.length - 1) {
+                        LXModel nextColumn = columns[col + 1];
+                        addDescentTransition(path, nextColumn, heightConstant, doorHeight);
+                    }
+                }
+            }
+        }
+        
+        static void addVerticalTransition(List<LXPoint> path, LXModel column, int heightConstant, int doorHeight) {
+            for (int y = heightConstant - 2; y >= heightConstant - doorHeight; y--) {
+                if (y >= 0 && y < column.points.length) {
+                    path.add(column.points[y]);
+                }
+            }
+        }
+        
+        static void addDescentTransition(List<LXPoint> path, LXModel nextColumn, int heightConstant, int doorHeight) {
+            for (int y = heightConstant - doorHeight; y < heightConstant; y++) {
+                if (y >= 0 && y < nextColumn.points.length) {
+                    path.add(nextColumn.points[y]);
+                }
+            }
+        }
+        
+        static void addCubeFacePerimeterWithDoors(List<LXPoint> facePath, Apotheneum.Cube.Face cubeFace,
+                                                 Apotheneum.Orientation orientation, int face) {
+            // Bottom edge with door handling
+            DoorTraversal.addPointsWithDoorHandling(facePath, cubeFace.columns, orientation, 
+                                                   face * Apotheneum.GRID_WIDTH, 
+                                                   Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
+            
+            // Right edge (bottom to top)
+            LXModel rightColumn = cubeFace.columns[cubeFace.columns.length - 1];
+            for (int y = rightColumn.points.length - 2; y >= 0; y--) {
+                facePath.add(rightColumn.points[y]);
+            }
+            
+            // Top edge (right to left)
+            for (int col = cubeFace.columns.length - 2; col >= 0; col--) {
+                LXModel column = cubeFace.columns[col];
+                if (column.points.length > 0) {
+                    facePath.add(column.points[0]);
+                }
+            }
+            
+            // Left edge (top to bottom) - but don't duplicate the starting point
+            LXModel leftColumn = cubeFace.columns[0];
+            int leftAvailable = orientation.available(face * Apotheneum.GRID_WIDTH);
+            int startY = (leftAvailable < Apotheneum.GRID_HEIGHT) ? leftAvailable - 1 : leftColumn.points.length - 2;
+            
+            for (int y = 1; y <= startY; y++) {
+                facePath.add(leftColumn.points[y]);
+            }
+        }
+        
+        static void addCubeFacePerimeterWithDoorsInterior(List<LXPoint> facePath, 
+                                                         Apotheneum.Orientation orientation, int face) {
+            // Bottom edge with door handling
+            for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
+                int globalCol = face * Apotheneum.GRID_WIDTH + col;
+                int available = orientation.available(globalCol);
+                LXModel column = orientation.columns()[globalCol];
+                
+                boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
+                boolean nextInDoor = (col < Apotheneum.GRID_WIDTH - 1) && 
+                                   (orientation.available(face * Apotheneum.GRID_WIDTH + col + 1) < Apotheneum.GRID_HEIGHT);
+                
+                if (!isInDoor) {
+                    facePath.add(column.points[column.points.length - 1]);
+                    if (nextInDoor) {
+                        addVerticalTransition(facePath, column, Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
+                    }
+                } else {
+                    if (available > 0) {
+                        facePath.add(column.points[available - 1]);
+                    }
+                    if (!nextInDoor && col < Apotheneum.GRID_WIDTH - 1) {
+                        int nextGlobalCol = face * Apotheneum.GRID_WIDTH + col + 1;
+                        LXModel nextColumn = orientation.columns()[nextGlobalCol];
+                        addDescentTransition(facePath, nextColumn, Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
+                    }
+                }
+            }
+            
+            // Right edge (bottom to top)
+            int rightGlobalCol = face * Apotheneum.GRID_WIDTH + (Apotheneum.GRID_WIDTH - 1);
+            LXModel rightColumn = orientation.columns()[rightGlobalCol];
+            for (int y = rightColumn.points.length - 2; y >= 0; y--) {
+                facePath.add(rightColumn.points[y]);
+            }
+            
+            // Top edge (right to left)
+            for (int col = Apotheneum.GRID_WIDTH - 2; col >= 0; col--) {
+                int globalCol = face * Apotheneum.GRID_WIDTH + col;
+                LXModel column = orientation.columns()[globalCol];
+                if (column.points.length > 0) {
+                    facePath.add(column.points[0]);
+                }
+            }
+            
+            // Left edge (top to bottom) - but don't duplicate the starting point
+            int leftGlobalCol = face * Apotheneum.GRID_WIDTH;
+            LXModel leftColumn = orientation.columns()[leftGlobalCol];
+            int leftAvailable = orientation.available(leftGlobalCol);
+            int startY = (leftAvailable < Apotheneum.GRID_HEIGHT) ? leftAvailable - 1 : leftColumn.points.length - 2;
+            
+            for (int y = 1; y <= startY; y++) {
+                facePath.add(leftColumn.points[y]);
+            }
+        }
+    }
+    
     private void buildCylinderBottomPath() {
         cylinderBottomPath = new ArrayList<>();
         
         if (!Apotheneum.exists) return;
         
         Apotheneum.Cylinder cylinder = Apotheneum.cylinder;
-        
-        // Traverse around the cylinder bottom, going up and around doors
-        for (int col = 0; col < cylinder.exterior.columns.length; col++) {
-            int available = cylinder.exterior.available(col);
-            LXModel column = cylinder.exterior.columns[col];
-            
-            // Check if this column is part of a door
-            boolean isInDoor = available < Apotheneum.CYLINDER_HEIGHT;
-            boolean prevInDoor = (col > 0) && (cylinder.exterior.available(col - 1) < Apotheneum.CYLINDER_HEIGHT);
-            boolean nextInDoor = (col < cylinder.exterior.columns.length - 1) && (cylinder.exterior.available(col + 1) < Apotheneum.CYLINDER_HEIGHT);
-            
-            if (!isInDoor) {
-                // Normal bottom edge - add the bottom point
-                cylinderBottomPath.add(column.points[column.points.length - 1]);
-                
-                // If next column is a door, add the vertical going up
-                if (nextInDoor) {
-                    // Travel up the right edge of this column to the door height
-                    for (int y = Apotheneum.CYLINDER_HEIGHT - 2; y >= Apotheneum.CYLINDER_HEIGHT - Apotheneum.DOOR_HEIGHT; y--) {
-                        if (y >= 0 && y < column.points.length) {
-                            cylinderBottomPath.add(column.points[y]);
-                        }
-                    }
-                }
-            } else {
-                // We're in a door column
-                // The door columns have fewer points (only above the door)
-                if (available > 0) {
-                    // Add the bottom-most available point (top of door opening)
-                    cylinderBottomPath.add(column.points[available - 1]);
-                }
-                
-                // If this is the last door column, add the descent
-                if (!nextInDoor && col < cylinder.exterior.columns.length - 1) {
-                    // Next column is not a door, so travel down on it
-                    LXModel nextColumn = cylinder.exterior.columns[col + 1];
-                    // Travel down from door height to bottom
-                    for (int y = Apotheneum.CYLINDER_HEIGHT - Apotheneum.DOOR_HEIGHT; y < Apotheneum.CYLINDER_HEIGHT; y++) {
-                        if (y >= 0 && y < nextColumn.points.length) {
-                            cylinderBottomPath.add(nextColumn.points[y]);
-                        }
-                    }
-                }
-            }
-        }
+        DoorTraversal.addPointsWithDoorHandling(cylinderBottomPath, cylinder.exterior.columns,
+                                               cylinder.exterior, 0, 
+                                               Apotheneum.CYLINDER_HEIGHT, Apotheneum.DOOR_HEIGHT);
     }
     
     private void buildCylinderBottomPathInterior() {
@@ -157,51 +261,9 @@ public class EdgeTracer extends ApotheneumPattern {
         if (!Apotheneum.exists) return;
         
         Apotheneum.Cylinder cylinder = Apotheneum.cylinder;
-        
-        // Traverse around the cylinder bottom interior, going up and around doors
-        for (int col = 0; col < cylinder.interior.columns.length; col++) {
-            int available = cylinder.interior.available(col);
-            LXModel column = cylinder.interior.columns[col];
-            
-            // Check if this column is part of a door
-            boolean isInDoor = available < Apotheneum.CYLINDER_HEIGHT;
-            boolean prevInDoor = (col > 0) && (cylinder.interior.available(col - 1) < Apotheneum.CYLINDER_HEIGHT);
-            boolean nextInDoor = (col < cylinder.interior.columns.length - 1) && (cylinder.interior.available(col + 1) < Apotheneum.CYLINDER_HEIGHT);
-            
-            if (!isInDoor) {
-                // Normal bottom edge - add the bottom point
-                cylinderBottomPathInterior.add(column.points[column.points.length - 1]);
-                
-                // If next column is a door, add the vertical going up
-                if (nextInDoor) {
-                    // Travel up the right edge of this column to the door height
-                    for (int y = Apotheneum.CYLINDER_HEIGHT - 2; y >= Apotheneum.CYLINDER_HEIGHT - Apotheneum.DOOR_HEIGHT; y--) {
-                        if (y >= 0 && y < column.points.length) {
-                            cylinderBottomPathInterior.add(column.points[y]);
-                        }
-                    }
-                }
-            } else {
-                // We're in a door column
-                // The door columns have fewer points (only above the door)
-                if (available > 0) {
-                    // Add the bottom-most available point (top of door opening)
-                    cylinderBottomPathInterior.add(column.points[available - 1]);
-                }
-                
-                // If this is the last door column, add the descent
-                if (!nextInDoor && col < cylinder.interior.columns.length - 1) {
-                    // Next column is not a door, so travel down on it
-                    LXModel nextColumn = cylinder.interior.columns[col + 1];
-                    // Travel down from door height to bottom
-                    for (int y = Apotheneum.CYLINDER_HEIGHT - Apotheneum.DOOR_HEIGHT; y < Apotheneum.CYLINDER_HEIGHT; y++) {
-                        if (y >= 0 && y < nextColumn.points.length) {
-                            cylinderBottomPathInterior.add(nextColumn.points[y]);
-                        }
-                    }
-                }
-            }
-        }
+        DoorTraversal.addPointsWithDoorHandling(cylinderBottomPathInterior, cylinder.interior.columns,
+                                               cylinder.interior, 0, 
+                                               Apotheneum.CYLINDER_HEIGHT, Apotheneum.DOOR_HEIGHT);
     }
     
     private void buildCubeBottomPath() {
@@ -214,51 +276,9 @@ public class EdgeTracer extends ApotheneumPattern {
         // Traverse around all 4 faces bottom edge, going up and around doors
         for (int face = 0; face < 4; face++) {
             Apotheneum.Cube.Face cubeFace = cube.faces[face];
-            
-            for (int col = 0; col < cubeFace.columns.length; col++) {
-                int globalCol = face * Apotheneum.GRID_WIDTH + col;
-                int available = cube.exterior.available(globalCol);
-                LXModel column = cubeFace.columns[col];
-                
-                // Check if this column is part of a door
-                boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
-                boolean prevInDoor = (col > 0) && (cube.exterior.available(face * Apotheneum.GRID_WIDTH + col - 1) < Apotheneum.GRID_HEIGHT);
-                boolean nextInDoor = (col < cubeFace.columns.length - 1) && (cube.exterior.available(face * Apotheneum.GRID_WIDTH + col + 1) < Apotheneum.GRID_HEIGHT);
-                
-                if (!isInDoor) {
-                    // Normal bottom edge - add the bottom point
-                    cubeBottomPath.add(column.points[column.points.length - 1]);
-                    
-                    // If next column is a door, add the vertical going up
-                    if (nextInDoor) {
-                        // Travel up the right edge of this column to the door height
-                        for (int y = Apotheneum.GRID_HEIGHT - 2; y >= Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y--) {
-                            if (y >= 0 && y < column.points.length) {
-                                cubeBottomPath.add(column.points[y]);
-                            }
-                        }
-                    }
-                } else {
-                    // We're in a door column
-                    // The door columns have fewer points (only above the door)
-                    if (available > 0) {
-                        // Add the bottom-most available point (top of door opening)
-                        cubeBottomPath.add(column.points[available - 1]);
-                    }
-                    
-                    // If this is the last door column, add the descent
-                    if (!nextInDoor && col < cubeFace.columns.length - 1) {
-                        // Next column is not a door, so travel down on it
-                        LXModel nextColumn = cubeFace.columns[col + 1];
-                        // Travel down from door height to bottom
-                        for (int y = Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y < Apotheneum.GRID_HEIGHT; y++) {
-                            if (y >= 0 && y < nextColumn.points.length) {
-                                cubeBottomPath.add(nextColumn.points[y]);
-                            }
-                        }
-                    }
-                }
-            }
+            DoorTraversal.addPointsWithDoorHandling(cubeBottomPath, cubeFace.columns,
+                                                   cube.exterior, face * Apotheneum.GRID_WIDTH, 
+                                                   Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
         }
     }
     
@@ -292,70 +312,7 @@ public class EdgeTracer extends ApotheneumPattern {
             List<LXPoint> facePath = new ArrayList<>();
             Apotheneum.Cube.Face cubeFace = cube.faces[face];
             
-            // Bottom edge (left to right) - handling doors
-            for (int col = 0; col < cubeFace.columns.length; col++) {
-                int globalCol = face * Apotheneum.GRID_WIDTH + col;
-                int available = cube.exterior.available(globalCol);
-                LXModel column = cubeFace.columns[col];
-                
-                boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
-                boolean prevInDoor = (col > 0) && (cube.exterior.available(face * Apotheneum.GRID_WIDTH + col - 1) < Apotheneum.GRID_HEIGHT);
-                boolean nextInDoor = (col < cubeFace.columns.length - 1) && (cube.exterior.available(face * Apotheneum.GRID_WIDTH + col + 1) < Apotheneum.GRID_HEIGHT);
-                
-                if (!isInDoor) {
-                    // Normal bottom edge
-                    facePath.add(column.points[column.points.length - 1]);
-                    
-                    // If next column is a door, add the vertical going up
-                    if (nextInDoor) {
-                        for (int y = Apotheneum.GRID_HEIGHT - 2; y >= Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y--) {
-                            if (y >= 0 && y < column.points.length) {
-                                facePath.add(column.points[y]);
-                            }
-                        }
-                    }
-                } else {
-                    // Door column
-                    if (available > 0) {
-                        facePath.add(column.points[available - 1]);
-                    }
-                    
-                    // If this is the last door column, add the descent
-                    if (!nextInDoor && col < cubeFace.columns.length - 1) {
-                        LXModel nextColumn = cubeFace.columns[col + 1];
-                        for (int y = Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y < Apotheneum.GRID_HEIGHT; y++) {
-                            if (y >= 0 && y < nextColumn.points.length) {
-                                facePath.add(nextColumn.points[y]);
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Right edge (bottom to top)
-            LXModel rightColumn = cubeFace.columns[cubeFace.columns.length - 1];
-            for (int y = rightColumn.points.length - 2; y >= 0; y--) {
-                facePath.add(rightColumn.points[y]);
-            }
-            
-            // Top edge (right to left)
-            for (int col = cubeFace.columns.length - 2; col >= 0; col--) {
-                LXModel column = cubeFace.columns[col];
-                if (column.points.length > 0) {
-                    facePath.add(column.points[0]);
-                }
-            }
-            
-            // Left edge (top to bottom) - but don't duplicate the starting point
-            LXModel leftColumn = cubeFace.columns[0];
-            // Check if the left column is affected by a door
-            int leftAvailable = cube.exterior.available(face * Apotheneum.GRID_WIDTH);
-            int startY = (leftAvailable < Apotheneum.GRID_HEIGHT) ? leftAvailable - 1 : leftColumn.points.length - 2;
-            
-            for (int y = 1; y <= startY; y++) {
-                facePath.add(leftColumn.points[y]);
-            }
-            
+            DoorTraversal.addCubeFacePerimeterWithDoors(facePath, cubeFace, cube.exterior, face);
             cubeFacePaths.add(facePath);
         }
     }
@@ -367,51 +324,30 @@ public class EdgeTracer extends ApotheneumPattern {
         
         Apotheneum.Cube cube = Apotheneum.cube;
         
-        // Traverse around all 4 faces bottom edge interior, going up and around doors
+        // Build bottom path for interior using special handling for interior columns
         for (int face = 0; face < 4; face++) {
-            Apotheneum.Cube.Face cubeFace = cube.faces[face];
-            
-            for (int col = 0; col < cubeFace.columns.length; col++) {
+            for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
                 int globalCol = face * Apotheneum.GRID_WIDTH + col;
                 int available = cube.interior.available(globalCol);
-                LXModel column = cube.interior.columns[globalCol];
+                LXModel column = cube.interior.columns()[globalCol];
                 
-                // Check if this column is part of a door
                 boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
-                boolean nextInDoor = (col < cubeFace.columns.length - 1) && (cube.interior.available(face * Apotheneum.GRID_WIDTH + col + 1) < Apotheneum.GRID_HEIGHT);
+                boolean nextInDoor = (col < Apotheneum.GRID_WIDTH - 1) && 
+                                   (cube.interior.available(face * Apotheneum.GRID_WIDTH + col + 1) < Apotheneum.GRID_HEIGHT);
                 
                 if (!isInDoor) {
-                    // Normal bottom edge - add the bottom point
                     cubeBottomPathInterior.add(column.points[column.points.length - 1]);
-                    
-                    // If next column is a door, add the vertical going up
                     if (nextInDoor) {
-                        // Travel up the right edge of this column to the door height
-                        for (int y = Apotheneum.GRID_HEIGHT - 2; y >= Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y--) {
-                            if (y >= 0 && y < column.points.length) {
-                                cubeBottomPathInterior.add(column.points[y]);
-                            }
-                        }
+                        DoorTraversal.addVerticalTransition(cubeBottomPathInterior, column, Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
                     }
                 } else {
-                    // We're in a door column
-                    // The door columns have fewer points (only above the door)
                     if (available > 0) {
-                        // Add the bottom-most available point (top of door opening)
                         cubeBottomPathInterior.add(column.points[available - 1]);
                     }
-                    
-                    // If this is the last door column, add the descent
-                    if (!nextInDoor && col < cubeFace.columns.length - 1) {
-                        // Next column is not a door, so travel down on it
+                    if (!nextInDoor && col < Apotheneum.GRID_WIDTH - 1) {
                         int nextGlobalCol = face * Apotheneum.GRID_WIDTH + col + 1;
-                        LXModel nextColumn = cube.interior.columns[nextGlobalCol];
-                        // Travel down from door height to bottom
-                        for (int y = Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y < Apotheneum.GRID_HEIGHT; y++) {
-                            if (y >= 0 && y < nextColumn.points.length) {
-                                cubeBottomPathInterior.add(nextColumn.points[y]);
-                            }
-                        }
+                        LXModel nextColumn = cube.interior.columns()[nextGlobalCol];
+                        DoorTraversal.addDescentTransition(cubeBottomPathInterior, nextColumn, Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
                     }
                 }
             }
@@ -448,124 +384,60 @@ public class EdgeTracer extends ApotheneumPattern {
         for (int face = 0; face < 4; face++) {
             List<LXPoint> facePath = new ArrayList<>();
             
-            // Bottom edge (left to right) - handling doors
-            for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
-                int globalCol = face * Apotheneum.GRID_WIDTH + col;
-                int available = cube.interior.available(globalCol);
-                LXModel column = cube.interior.columns[globalCol];
-                
-                boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
-                boolean nextInDoor = (col < Apotheneum.GRID_WIDTH - 1) && (cube.interior.available(face * Apotheneum.GRID_WIDTH + col + 1) < Apotheneum.GRID_HEIGHT);
-                
-                if (!isInDoor) {
-                    // Normal bottom edge
-                    facePath.add(column.points[column.points.length - 1]);
-                    
-                    // If next column is a door, add the vertical going up
-                    if (nextInDoor) {
-                        for (int y = Apotheneum.GRID_HEIGHT - 2; y >= Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y--) {
-                            if (y >= 0 && y < column.points.length) {
-                                facePath.add(column.points[y]);
-                            }
-                        }
-                    }
-                } else {
-                    // Door column
-                    if (available > 0) {
-                        facePath.add(column.points[available - 1]);
-                    }
-                    
-                    // If this is the last door column, add the descent
-                    if (!nextInDoor && col < Apotheneum.GRID_WIDTH - 1) {
-                        int nextGlobalCol = face * Apotheneum.GRID_WIDTH + col + 1;
-                        LXModel nextColumn = cube.interior.columns[nextGlobalCol];
-                        for (int y = Apotheneum.GRID_HEIGHT - Apotheneum.DOOR_HEIGHT; y < Apotheneum.GRID_HEIGHT; y++) {
-                            if (y >= 0 && y < nextColumn.points.length) {
-                                facePath.add(nextColumn.points[y]);
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Right edge (bottom to top)
-            int rightGlobalCol = face * Apotheneum.GRID_WIDTH + (Apotheneum.GRID_WIDTH - 1);
-            LXModel rightColumn = cube.interior.columns[rightGlobalCol];
-            for (int y = rightColumn.points.length - 2; y >= 0; y--) {
-                facePath.add(rightColumn.points[y]);
-            }
-            
-            // Top edge (right to left)
-            for (int col = Apotheneum.GRID_WIDTH - 2; col >= 0; col--) {
-                int globalCol = face * Apotheneum.GRID_WIDTH + col;
-                LXModel column = cube.interior.columns[globalCol];
-                if (column.points.length > 0) {
-                    facePath.add(column.points[0]);
-                }
-            }
-            
-            // Left edge (top to bottom) - but don't duplicate the starting point
-            int leftGlobalCol = face * Apotheneum.GRID_WIDTH;
-            LXModel leftColumn = cube.interior.columns[leftGlobalCol];
-            // Check if the left column is affected by a door
-            int leftAvailable = cube.interior.available(leftGlobalCol);
-            int startY = (leftAvailable < Apotheneum.GRID_HEIGHT) ? leftAvailable - 1 : leftColumn.points.length - 2;
-            
-            for (int y = 1; y <= startY; y++) {
-                facePath.add(leftColumn.points[y]);
-            }
-            
+            DoorTraversal.addCubeFacePerimeterWithDoorsInterior(facePath, cube.interior, face);
             cubeFacePathsInterior.add(facePath);
         }
     }
     
     private void buildCubeFrontFlatPath() {
-        cubeFrontFlatPath = new ArrayList<>();
+        cubeFrontFlatPath = buildFlatPath(Apotheneum.cube.exterior, 0, Apotheneum.cube.faces[0]);
+    }
+    
+    private void buildCubeFrontFlatPathInterior() {
+        cubeFrontFlatPathInterior = buildFlatPathInterior(Apotheneum.cube.interior, 0);
+    }
+    
+    // Generic helper methods for building flat paths
+    private List<LXPoint> buildFlatPath(Apotheneum.Orientation orientation, int frontFace, Apotheneum.Cube.Face cubeFace) {
+        List<LXPoint> path = new ArrayList<>();
         
-        if (!Apotheneum.exists) return;
-        
-        Apotheneum.Cube cube = Apotheneum.cube;
-        
-        // Front face is face 0 - create a truly flat horizontal line at consistent height
-        int frontFace = 0;
-        Apotheneum.Cube.Face cubeFace = cube.faces[frontFace];
+        if (!Apotheneum.exists) return path;
         
         // For a truly flat line, use the bottom-most available LED from each column
         // This ensures all LEDs are at the same physical height (door level)
         for (int col = 0; col < cubeFace.columns.length; col++) {
             int globalCol = frontFace * Apotheneum.GRID_WIDTH + col;
-            int available = cube.exterior.available(globalCol);
+            int available = orientation.available(globalCol);
             LXModel column = cubeFace.columns[col];
             
             // Always use the last available LED (bottom-most) from each column
             if (available > 0 && (available - 1) < column.points.length) {
-                cubeFrontFlatPath.add(column.points[available - 1]);
+                path.add(column.points[available - 1]);
             }
         }
+        
+        return path;
     }
     
-    private void buildCubeFrontFlatPathInterior() {
-        cubeFrontFlatPathInterior = new ArrayList<>();
+    private List<LXPoint> buildFlatPathInterior(Apotheneum.Orientation orientation, int frontFace) {
+        List<LXPoint> path = new ArrayList<>();
         
-        if (!Apotheneum.exists) return;
-        
-        Apotheneum.Cube cube = Apotheneum.cube;
-        
-        // Front face is face 0 - create a truly flat horizontal line at consistent height interior
-        int frontFace = 0;
+        if (!Apotheneum.exists) return path;
         
         // For a truly flat line, use the bottom-most available LED from each column
         // This ensures all LEDs are at the same physical height (door level)
         for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
             int globalCol = frontFace * Apotheneum.GRID_WIDTH + col;
-            int available = cube.interior.available(globalCol);
-            LXModel column = cube.interior.columns[globalCol];
+            int available = orientation.available(globalCol);
+            LXModel column = orientation.columns()[globalCol];
             
             // Always use the last available LED (bottom-most) from each column
             if (available > 0 && (available - 1) < column.points.length) {
-                cubeFrontFlatPathInterior.add(column.points[available - 1]);
+                path.add(column.points[available - 1]);
             }
         }
+        
+        return path;
     }
     
     @Override
@@ -628,10 +500,12 @@ public class EdgeTracer extends ApotheneumPattern {
         int pathLength = path.size();
         double lengthInPoints = length.getValue() * pathLength;
         double centerPoint = pos * pathLength;
-        double thicknessRadius = width.getValue();
+        double thicknessRadiusSquared = width.getValue() * width.getValue(); // Use squared distance to avoid sqrt
+        
+        // Clear and reuse pre-allocated buffer instead of creating new ArrayList
+        activePointsBuffer.clear();
         
         // Get the points along the path that should be lit (length control)
-        List<LXPoint> activePoints = new ArrayList<>();
         for (int i = 0; i < pathLength; i++) {
             // Calculate distance considering wrap-around
             double distance = Math.min(
@@ -641,23 +515,24 @@ public class EdgeTracer extends ApotheneumPattern {
             );
             
             if (distance < lengthInPoints / 2) {
-                LXPoint pathPoint = path.get(i);
-                activePoints.add(pathPoint);
+                activePointsBuffer.add(path.get(i));
+            }
+        }
+        
+        // Pre-calculate color once
+        int color = LXColor.gray((float)(brightness.getValue() * 100));
+        
+        // Now find all nearby points within thickness radius for each active point
+        for (LXPoint pathPoint : activePointsBuffer) {
+            for (LXPoint point : model.points) {
+                // Use squared distance comparison to avoid expensive sqrt calculation
+                double dx = point.x - pathPoint.x;
+                double dy = point.y - pathPoint.y;
+                double dz = point.z - pathPoint.z;
+                double distSquared = dx*dx + dy*dy + dz*dz;
                 
-                // Now find all nearby points within thickness radius
-                for (LXPoint point : model.points) {
-                    double dist3D = Math.sqrt(
-                        Math.pow(point.x - pathPoint.x, 2) +
-                        Math.pow(point.y - pathPoint.y, 2) +
-                        Math.pow(point.z - pathPoint.z, 2)
-                    );
-                    
-                    if (dist3D <= thicknessRadius) {
-                        // Solid white - no color, just brightness
-                        int color = LXColor.gray((float)(brightness.getValue() * 100));
-                        
-                        colors[point.index] = LXColor.add(colors[point.index], color);
-                    }
+                if (distSquared <= thicknessRadiusSquared) {
+                    colors[point.index] = LXColor.add(colors[point.index], color);
                 }
             }
         }

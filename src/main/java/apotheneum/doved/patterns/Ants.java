@@ -103,6 +103,12 @@ public class Ants extends ApotheneumPattern implements UIDeviceControls<Ants> {
       new String[] { "Cube", "Cylinder" }, 0)
       .setDescription("Which shape to render on");
 
+  public final CompoundParameter wanderChance = new CompoundParameter("Wander", 0.02, 0, 0.1)
+      .setDescription("Chance per frame for ants to wander off path");
+
+  public final CompoundParameter wanderDistance = new CompoundParameter("Wander Dist", 3.0, 0.5, 8.0)
+      .setDescription("How far ants wander from their path");
+
   private static class AntSegment {
     float x, y;
     boolean goingToTarget; // Direction when this segment was created
@@ -250,12 +256,6 @@ public class Ants extends ApotheneumPattern implements UIDeviceControls<Ants> {
 
   @Override
   protected void render(double deltaMs) {
-    // Only run if pattern is not enabled
-    if (!this.enabled.isOn()) {
-      setApotheneumColor(0); // Clear all
-      return;
-    }
-
     setApotheneumColor(0); // Clear all
 
     // Update current time for delay system
@@ -853,12 +853,6 @@ public class Ants extends ApotheneumPattern implements UIDeviceControls<Ants> {
     float speedVar = 1.0f + ((float) (Math.random() - 0.5) * 2.0f * (float) speedVariation.getValue());
     return new MovingAnt(0.0f, antColor, pathIndex, speedVar);
   }
-
-  public final CompoundParameter wanderChance = new CompoundParameter("Wander", 0.02, 0, 0.1)
-      .setDescription("Chance per frame for ants to wander off path");
-
-  public final CompoundParameter wanderDistance = new CompoundParameter("Wander Dist", 3.0, 0.5, 8.0)
-      .setDescription("How far ants wander from their path");
 
   private float[] getPositionAlongPath(float t, int pathIndex) {
     // Ensure we have at least one path

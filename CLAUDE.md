@@ -41,6 +41,21 @@ The installation has doors that affect pixel availability:
 - Synchronization adds unnecessary overhead and can cause performance issues
 - Use standard Java collections and data structures without thread safety concerns
 
+### Pattern Lifecycle and Activation
+
+- **The LX framework automatically handles pattern activation** - Only the currently active pattern on a channel has its `run()` method called
+- **No need to manually check if pattern is enabled** - When a pattern becomes inactive, its render methods stop being called entirely
+- **For optional animation control**, use parameter-based early returns like ImagePattern's `gifAnimating` parameter:
+  ```java
+  public void animateGif(double deltaMs) {
+    if (!this.animationEnabled.isOn()) {
+      return; // Skip animation updates when parameter is off
+    }
+    // ... animation logic continues only if enabled
+  }
+  ```
+- **Pattern activation is managed at the framework level** - No need for manual `enabled` checks in render methods
+
 ### Performance Best Practices
 
 - **Avoid creating new ArrayLists in render loops** - Reuse collections or use pre-allocated arrays

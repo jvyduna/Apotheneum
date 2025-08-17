@@ -208,11 +208,6 @@ public class Fireflies extends ApotheneumPattern implements UIDeviceControls<Fir
 
   @Override
   protected void render(double deltaMs) {
-    if (!this.enabled.isOn()) {
-      setApotheneumColor(0);
-      return;
-    }
-
     // Clear the display
     setApotheneumColor(0);
 
