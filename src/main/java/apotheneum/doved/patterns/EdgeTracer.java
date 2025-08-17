@@ -29,7 +29,8 @@ public class EdgeTracer extends ApotheneumPattern {
     public enum CubeMode {
         PER_FACE("Per Face"),
         BOTTOM("Bottom"),
-        TOP("Top");
+        TOP("Top"),
+        FRONT_FLAT("Front Flat");
         
         private final String label;
         CubeMode(String label) { this.label = label; }
@@ -67,6 +68,8 @@ public class EdgeTracer extends ApotheneumPattern {
     private List<LXPoint> cubeBottomPathInterior;
     private List<LXPoint> cubeTopPath;
     private List<LXPoint> cubeTopPathInterior;
+    private List<LXPoint> cubeFrontFlatPath;
+    private List<LXPoint> cubeFrontFlatPathInterior;
     private List<List<LXPoint>> cubeFacePaths;
     private List<List<LXPoint>> cubeFacePathsInterior;
     
@@ -89,6 +92,8 @@ public class EdgeTracer extends ApotheneumPattern {
         buildCubeBottomPathInterior();
         buildCubeTopPath();
         buildCubeTopPathInterior();
+        buildCubeFrontFlatPath();
+        buildCubeFrontFlatPathInterior();
         buildCubeFacePaths();
         buildCubeFacePathsInterior();
     }
@@ -514,6 +519,67 @@ public class EdgeTracer extends ApotheneumPattern {
         }
     }
     
+    private void buildCubeFrontFlatPath() {
+        cubeFrontFlatPath = new ArrayList<>();
+        
+        if (!Apotheneum.exists) return;
+        
+        Apotheneum.Cube cube = Apotheneum.cube;
+        
+        // Front face is face 0 - create a straight horizontal line across the bottom
+        int frontFace = 0;
+        Apotheneum.Cube.Face cubeFace = cube.faces[frontFace];
+        
+        for (int col = 0; col < cubeFace.columns.length; col++) {
+            int globalCol = frontFace * Apotheneum.GRID_WIDTH + col;
+            int available = cube.exterior.available(globalCol);
+            LXModel column = cubeFace.columns[col];
+            
+            // Check if this column is part of a door
+            boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
+            
+            if (!isInDoor) {
+                // Normal bottom edge - add the bottom point
+                cubeFrontFlatPath.add(column.points[column.points.length - 1]);
+            } else {
+                // Door column - add the bottom-most available point (top of door opening)
+                if (available > 0) {
+                    cubeFrontFlatPath.add(column.points[available - 1]);
+                }
+            }
+        }
+    }
+    
+    private void buildCubeFrontFlatPathInterior() {
+        cubeFrontFlatPathInterior = new ArrayList<>();
+        
+        if (!Apotheneum.exists) return;
+        
+        Apotheneum.Cube cube = Apotheneum.cube;
+        
+        // Front face is face 0 - create a straight horizontal line across the bottom interior
+        int frontFace = 0;
+        
+        for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
+            int globalCol = frontFace * Apotheneum.GRID_WIDTH + col;
+            int available = cube.interior.available(globalCol);
+            LXModel column = cube.interior.columns[globalCol];
+            
+            // Check if this column is part of a door
+            boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
+            
+            if (!isInDoor) {
+                // Normal bottom edge - add the bottom point
+                cubeFrontFlatPathInterior.add(column.points[column.points.length - 1]);
+            } else {
+                // Door column - add the bottom-most available point (top of door opening)
+                if (available > 0) {
+                    cubeFrontFlatPathInterior.add(column.points[available - 1]);
+                }
+            }
+        }
+    }
+    
     @Override
     public void render(double deltaMs) {
         if (!Apotheneum.exists) return;
@@ -556,6 +622,12 @@ public class EdgeTracer extends ApotheneumPattern {
                             drawPath(facePath, position.getValue());
                         }
                     }
+                    break;
+                    
+                case FRONT_FLAT:
+                    // Draw straight front edge - exterior and interior
+                    drawPath(cubeFrontFlatPath, position.getValue());
+                    drawPath(cubeFrontFlatPathInterior, position.getValue());
                     break;
             }
         }
