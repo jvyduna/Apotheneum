@@ -719,38 +719,45 @@ public class Boids extends ApotheneumPattern implements UIDeviceControls<Boids> 
 
   @Override
   public void buildDeviceControls(UI ui, UIDevice uiDevice, Boids boids) {
-    uiDevice.setLayout(UIDevice.Layout.HORIZONTAL);
+    uiDevice.setLayout(UIDevice.Layout.HORIZONTAL, 2);
     
-    addColumn(uiDevice, "Flock",
+    // Column 1: max flock, shape
+    addColumn(uiDevice, "Config",
       newIntegerBox(boids.maxFlock),
-      newKnob(boids.flockDensity),
-      newKnob(boids.speed)
-    );
-    
-    addVerticalBreak(ui, uiDevice);
-    
-    addColumn(uiDevice, "Forces",
-      newKnob(boids.separation),
-      newKnob(boids.alignment),
-      newKnob(boids.cohesion)
-    );
-    
-    addVerticalBreak(ui, uiDevice);
-    
-    addColumn(uiDevice, "Behavior",
-      newKnob(boids.neighborRadius),
-      newKnob(boids.turbulence),
-      newKnob(boids.blur)
-    );
-    
-    addVerticalBreak(ui, uiDevice);
-    
-    addColumn(uiDevice, "Display",
-      newKnob(boids.brightness),
       newDropMenu(boids.shape)
     );
     
     addVerticalBreak(ui, uiDevice);
     
+    // Column 2: density, cohesion
+    addColumn(uiDevice, "Group",
+      newKnob(boids.flockDensity),
+      newKnob(boids.cohesion)
+    );
+    
+    addVerticalBreak(ui, uiDevice);
+    
+    // Column 3: speed, separation
+    addColumn(uiDevice, "Motion",
+      newKnob(boids.speed),
+      newKnob(boids.separation)
+    );
+    
+    addVerticalBreak(ui, uiDevice);
+    
+    // Column 4: turbulence, alignment
+    addColumn(uiDevice, "Behavior",
+      newKnob(boids.turbulence),
+      newKnob(boids.alignment)
+    );
+    
+    addVerticalBreak(ui, uiDevice);
+    
+    // Column 5: blur, brightness, neighbor radius
+    addColumn(uiDevice, "Effects",
+      newKnob(boids.blur),
+      newKnob(boids.brightness),
+      newKnob(boids.neighborRadius)
+    );
   }
 }

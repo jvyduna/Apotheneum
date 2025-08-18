@@ -27,12 +27,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     double lifespan; // Total lifespan in milliseconds
     double age;     // Current age in milliseconds
     
-    // Trail history for longer trails
-    private static final int TRAIL_HISTORY = 8; // Store last 8 positions
-    float[] trailX = new float[TRAIL_HISTORY];
-    float[] trailY = new float[TRAIL_HISTORY];
-    float[] trailZ = new float[TRAIL_HISTORY];
-    int trailIndex = 0; // Current position in circular buffer
     
     Star(double maxLifespan, LXPoint[] allPoints) {
       this.lifespan = Math.random() * maxLifespan + maxLifespan * 0.5; // 50%-150% of max
@@ -40,18 +34,13 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
     
     void reset() {
-      // Start at random position throughout space
+      // Reset is called during initialization and when stars die
+      // We'll set a default position here, but actual spawning position
+      // will be set by the main pattern based on motion direction
       x = (float)Math.random();
       y = (float)Math.random(); 
       z = (float)Math.random();
       
-      // Initialize trail history to current position
-      for (int i = 0; i < TRAIL_HISTORY; i++) {
-        trailX[i] = x;
-        trailY[i] = y;
-        trailZ[i] = z;
-      }
-      trailIndex = 0;
       
       // Stars don't have individual velocities - they're static
       // Only the motion controls move them
@@ -82,12 +71,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
       
       float currentSpeed = baseSpeed * speed;
       
-      // Store current position in trail history before moving
-      trailX[trailIndex] = x;
-      trailY[trailIndex] = y;
-      trailZ[trailIndex] = z;
-      trailIndex = (trailIndex + 1) % TRAIL_HISTORY;
-      
       // Motion control moves the entire star field in one axis
       // Stars themselves are static - only the field moves
       float movement = direction * currentSpeed;
@@ -104,18 +87,85 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
           break;
       }
       
-      // Reset if out of bounds or exceeded lifespan
-      // Wrap around - when stars exit one side, they enter the opposite side
-      if (x < -0.2f) x = 1.2f;
-      if (x > 1.2f) x = -0.2f;
-      if (y < -0.2f) y = 1.2f;
-      if (y > 1.2f) y = -0.2f;
-      if (z < -0.2f) z = 1.2f;
-      if (z > 1.2f) z = -0.2f;
+      
+      // Reset if out of bounds - spawn behind based on motion direction
+      // This creates a natural flow where stars come from behind and exit in front
+      boolean outOfBounds = false;
+      
+      // Check if star has exited the extended boundaries
+      if (x < -0.2f || x > 1.2f || y < -0.2f || y > 1.2f || z < -0.2f || z > 1.2f) {
+        // Only respawn if the star is moving away from the installation
+        // This prevents stars from immediately respawning when they should be traveling through
+        switch (axis) {
+          case 0: // X-axis motion
+            if ((direction > 0 && x > 1.2f) || (direction < 0 && x < -0.2f)) {
+              outOfBounds = true;
+            }
+            break;
+          case 1: // Y-axis motion
+            if ((direction > 0 && y > 1.2f) || (direction < 0 && y < -0.2f)) {
+              outOfBounds = true;
+            }
+            break;
+          case 2: // Z-axis motion
+            if ((direction > 0 && z > 1.2f) || (direction < 0 && z < -0.2f)) {
+              outOfBounds = true;
+            }
+            break;
+        }
+        
+        if (outOfBounds) {
+          spawnBehind(axis, direction);
+          return; // Exit early, don't check lifespan
+        }
+      }
       
       if (age >= lifespan) {
-        reset();
+        spawnBehind(axis, direction);
       }
+    }
+    
+    // Spawn star behind the installation based on motion direction
+    void spawnBehind(int axis, float direction) {
+      // Random position in the two perpendicular axes
+      float rand1 = (float)Math.random();
+      float rand2 = (float)Math.random();
+      
+      switch (axis) {
+        case 0: // X-axis motion
+          y = rand1;
+          z = rand2;
+          if (direction > 0) {
+            x = -0.1f; // Spawn just behind negative X
+          } else {
+            x = 1.1f; // Spawn just behind positive X
+          }
+          break;
+          
+        case 1: // Y-axis motion
+          x = rand1;
+          z = rand2;
+          if (direction > 0) {
+            y = -0.1f; // Spawn just behind negative Y
+          } else {
+            y = 1.1f; // Spawn just behind positive Y
+          }
+          break;
+          
+        case 2: // Z-axis motion
+          x = rand1;
+          y = rand2;
+          if (direction > 0) {
+            z = -0.1f; // Spawn just behind negative Z
+          } else {
+            z = 1.1f; // Spawn just behind positive Z
+          }
+          break;
+      }
+      
+      
+      // Reset age
+      age = 0;
     }
     
     float getBrightness() {
@@ -138,10 +188,10 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
   private final List<Star> stars = new ArrayList<>();
   private LXPoint[] allPoints; // Cache of all LED points for targeting
   
-  public final CompoundParameter speed = new CompoundParameter("Speed", 0.5, 0.1, 10.0)
+  public final CompoundParameter speed = new CompoundParameter("Speed", 0.5, 0.1, 50.0)
     .setDescription("Speed of hyperspace travel");
     
-  public final CompoundParameter density = new CompoundParameter("Density", 100, 10, 800)
+  public final CompoundParameter density = new CompoundParameter("Density", 100, 10, 3000)
     .setDescription("Number of stars");
     
   public final CompoundParameter starSize = new CompoundParameter("Star Size", 0.1, 0.05, 0.3)
@@ -153,11 +203,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
   public final CompoundParameter brightness = new CompoundParameter("Bright", 1.0, 0.1, 2.0)
     .setDescription("Overall brightness");
     
-  public final CompoundParameter trailLength = new CompoundParameter("Trail", 0.0, 0.0, 1.0)
-    .setDescription("Length of star trails");
-    
-  public final CompoundParameter trailBrightness = new CompoundParameter("Trail Bright", 0.7, 0.1, 2.0)
-    .setDescription("Brightness of star trails");
     
   public final BooleanParameter pulse = new BooleanParameter("Pulse", false)
     .setDescription("Pulsing speed effect");
@@ -169,6 +214,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     .setUnits(CompoundParameter.Units.PERCENT_NORMALIZED)
     .setPolarity(CompoundParameter.Polarity.BIPOLAR)
     .setDescription("Motion direction: -1=Negative, +1=Positive");
+    
   
   private double pulsePhase = 0;
   
@@ -179,8 +225,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     addParameter("starSize", this.starSize);
     addParameter("duration", this.duration);
     addParameter("brightness", this.brightness);
-    addParameter("trailLength", this.trailLength);
-    addParameter("trailBrightness", this.trailBrightness);
     addParameter("pulse", this.pulse);
     addParameter("motionAxis", this.motionAxis);
     addParameter("motionDirection", this.motionDirection);
@@ -194,9 +238,14 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
   private void updateStarCount() {
     int targetCount = (int)density.getValue();
     double maxLifespan = duration.getValue();
+    int axis = (int)motionAxis.getValue();
+    float direction = (float)motionDirection.getValue();
     
     while (stars.size() < targetCount) {
-      stars.add(new Star(maxLifespan, allPoints));
+      Star newStar = new Star(maxLifespan, allPoints);
+      // Spawn new stars behind the installation for natural flow
+      newStar.spawnBehind(axis, direction);
+      stars.add(newStar);
     }
     while (stars.size() > targetCount) {
       stars.remove(stars.size() - 1);
@@ -218,6 +267,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
       pulsePhase += deltaMs * 0.003;
     }
     
+    
     // Calculate current speed with optional pulse
     float currentSpeed = (float)(speed.getValue() * deltaMs * 0.0001);
     if (pulse.isOn()) {
@@ -238,9 +288,8 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
       colors[p.index] = 0;
     }
     
-    // Now render each star as a sharp point with optional trails
+    // Now render each star as a sharp point
     float brightnessMult = (float)brightness.getValue();
-    float trailAmount = (float)trailLength.getValue();
     
     for (Star star : stars) {
       // Only render stars that are reasonably close to the visible cube
@@ -249,52 +298,32 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
           star.y >= -0.2f && star.y <= 1.2f && 
           star.z >= -0.2f && star.z <= 1.2f) {
         
-        // Render trail if enabled
-        if (trailAmount > 0.01f) {
-          // Calculate number of trail points to render based on parameter
-          int maxTrailPoints = (int)(trailAmount * Star.TRAIL_HISTORY); // Use up to all history based on parameter
-          
-          // Render each historical position as part of the trail
-          for (int i = 1; i <= maxTrailPoints; i++) {
-            // Get position from trail history (going backwards in time)
-            int historyIndex = (star.trailIndex - i + Star.TRAIL_HISTORY) % Star.TRAIL_HISTORY;
-            float trailX = star.trailX[historyIndex];
-            float trailY = star.trailY[historyIndex];
-            float trailZ = star.trailZ[historyIndex];
-            
-            // Quick bounds check
-            if (trailX < 0 || trailX > 1 || trailY < 0 || trailY > 1 || trailZ < 0 || trailZ > 1) {
-              continue;
-            }
-            
-            // Render trail point with fading brightness
-            float fade = 1.0f - ((float)i / maxTrailPoints); // Fade based on age
-            float trailBright = star.getBrightness() * brightnessMult * fade * (float)trailBrightness.getValue();
-            renderStarAtPoint(trailX, trailY, trailZ, star.color, trailBright);
-          }
-        }
-        
-        // Always render the star itself 
+        // Render the star
         float starBrightness = star.getBrightness() * brightnessMult;
         renderStarAtPoint(star.x, star.y, star.z, star.color, starBrightness);
       }
     }
   }
   
-  // Efficient star rendering - finds closest LED without O(n²) complexity
+  // Efficient star rendering - finds closest LED in 3D space with distance threshold
   private void renderStarAtPoint(float x, float y, float z, int color, float brightness) {
     // Quick bounds check
     if (x < 0 || x > 1 || y < 0 || y > 1 || z < 0 || z > 1) return;
     
+    // Convert star position from normalized space to model space
+    float starX = x * (model.xMax - model.xMin) + model.xMin;
+    float starY = y * (model.yMax - model.yMin) + model.yMin;
+    float starZ = z * (model.zMax - model.zMin) + model.zMin;
+    
     float minDistanceSquared = Float.MAX_VALUE;
     int closestIndex = -1;
     
-    // Single pass to find closest LED - O(n) instead of O(n²)
+    // Find closest LED using actual 3D coordinates - no distance limit
     for (LXPoint p : model.points) {
-      float dx = p.xn - x;
-      float dy = p.yn - y;
-      float dz = p.zn - z;
-      float distanceSquared = dx*dx + dy*dy + dz*dz; // No sqrt needed!
+      float dx = p.x - starX;
+      float dy = p.y - starY;
+      float dz = p.z - starZ;
+      float distanceSquared = dx*dx + dy*dy + dz*dz;
       
       if (distanceSquared < minDistanceSquared) {
         minDistanceSquared = distanceSquared;
@@ -302,7 +331,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
       }
     }
     
-    // Render to closest LED only - much faster than interpolation
+    // Always render to the closest LED
     if (closestIndex >= 0) {
       int finalColor = LXColor.scaleBrightness(color, brightness);
       colors[closestIndex] = LXColor.blend(colors[closestIndex], finalColor, LXColor.Blend.ADD);
@@ -330,9 +359,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     
     // Visual controls
     addColumn(uiDevice, "Visual",
-      newKnob(pattern.brightness),
-      newKnob(pattern.trailLength),
-      newKnob(pattern.trailBrightness)).setChildSpacing(6);
+      newKnob(pattern.brightness)).setChildSpacing(6);
       
     addVerticalBreak(ui, uiDevice);
     
