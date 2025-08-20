@@ -1,6 +1,7 @@
 package apotheneum.patterns;
 
 import apotheneum.Apotheneum;
+import apotheneum.ApotheneumPattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponentName;
@@ -9,7 +10,6 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.studio.LXStudio.UI;
 import heronarts.lx.studio.ui.device.UIDevice;
 import heronarts.lx.studio.ui.device.UIDeviceControls;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 @LXCategory("Apotheneum")
 @LXComponentName("Hyperspace")
-public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace> {
+public class Hyperspace extends ApotheneumPattern implements UIDeviceControls<Hyperspace> {
   
   // Star particle in 3D space
   private static class Star {
@@ -196,6 +196,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     private final int gridWidth, gridHeight, gridDepth;
     private final float xMin, yMin, zMin;
     private final float xMax, yMax, zMax;
+    private final List<LXPoint> reusableList = new ArrayList<>(); // Reusable list to avoid allocations
     
     LEDSpatialGrid(LXPoint[] points, float cellSize) {
       this.cellSize = cellSize;
@@ -239,7 +240,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
     
     List<LXPoint> getNearbyLEDs(float x, float y, float z, float radius) {
-      List<LXPoint> nearbyLEDs = new ArrayList<>();
+      reusableList.clear(); // Clear previous results
       
       // Calculate cell range to search
       int minGridX = Math.max(0, (int) Math.floor((x - radius - xMin) / cellSize));
@@ -256,13 +257,13 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
             long key = getKey(gx, gy, gz);
             List<LXPoint> cell = grid.get(key);
             if (cell != null) {
-              nearbyLEDs.addAll(cell);
+              reusableList.addAll(cell);
             }
           }
         }
       }
       
-      return nearbyLEDs;
+      return reusableList;
     }
     
     private long getCellKey(float x, float y, float z) {
@@ -320,9 +321,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     .setPolarity(CompoundParameter.Polarity.BIPOLAR)
     .setDescription("Motion direction: -1=Negative, +1=Positive");
     
-  public final DiscreteParameter renderMode = new DiscreteParameter("Render Mode", 
-    new String[]{"Closest LED", "Multi-Surface", "Fixed Viewpoint"}, 0)
-    .setDescription("How stars are rendered: Closest=original, Multi=all surfaces, Fixed=from outside cube");
     
   public final BooleanParameter renderToCube = new BooleanParameter("Cube", true)
     .setDescription("Render stars to cube surfaces");
@@ -342,7 +340,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     addParameter("pulse", this.pulse);
     addParameter("motionAxis", this.motionAxis);
     addParameter("motionDirection", this.motionDirection);
-    addParameter("renderMode", this.renderMode);
     addParameter("renderToCube", this.renderToCube);
     addParameter("renderToCylinder", this.renderToCylinder);
     
@@ -385,7 +382,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
   }
   
   @Override
-  protected void run(double deltaMs) {
+  protected void render(double deltaMs) {
     long frameStartTime = System.nanoTime();
     
     // Update pulse phase
@@ -429,20 +426,9 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
           star.y >= -0.2f && star.y <= 1.2f && 
           star.z >= -0.2f && star.z <= 1.2f) {
         
-        // Render the star using selected mode
+        // Render the star using closest LED algorithm
         float starBrightness = star.getBrightness() * brightnessMult;
-        int mode = renderMode.getValuei();
-        switch (mode) {
-          case 0: // Closest LED (original)
-            renderStarClosest(star.x, star.y, star.z, star.color, starBrightness);
-            break;
-          case 1: // Multi-Surface
-            renderStarMultiSurface(star.x, star.y, star.z, star.color, starBrightness);
-            break;
-          case 2: // Fixed Viewpoint
-            renderStarFixedViewpoint(star.x, star.y, star.z, star.color, starBrightness);
-            break;
-        }
+        renderStar(star.x, star.y, star.z, star.color, starBrightness);
         starsRendered++;
       }
     }
@@ -481,15 +467,34 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
   }
   
-  // Mode 0: Original closest LED rendering
-  private void renderStarClosest(float x, float y, float z, int color, float brightness) {
-    // Quick bounds check
-    if (x < 0 || x > 1 || y < 0 || y > 1 || z < 0 || z > 1) return;
+  // Helper method to convert normalized coordinates to model space
+  private float[] convertToModelSpace(float x, float y, float z) {
+    return new float[] {
+      x * (model.xMax - model.xMin) + model.xMin,
+      y * (model.yMax - model.yMin) + model.yMin,
+      z * (model.zMax - model.zMin) + model.zMin
+    };
+  }
+  
+  // Helper method for bounds checking
+  private boolean isInBounds(float x, float y, float z) {
+    return x >= 0 && x <= 1 && y >= 0 && y <= 1 && z >= 0 && z <= 1;
+  }
+  
+  // Helper method to track LED search performance
+  private void trackLEDSearchPerformance(long startTime, int ledCount) {
+    long endTime = System.nanoTime();
+    totalFindLEDTime += (endTime - startTime);
+    totalLEDsSearched += ledCount;
+    totalStarsRendered++;
+  }
+  
+  // Render star using closest LED algorithm
+  private void renderStar(float x, float y, float z, int color, float brightness) {
+    if (!isInBounds(x, y, z)) return;
     
-    // Convert star position from normalized space to model space
-    float starX = x * (model.xMax - model.xMin) + model.xMin;
-    float starY = y * (model.yMax - model.yMin) + model.yMin;
-    float starZ = z * (model.zMax - model.zMin) + model.zMin;
+    float[] modelCoords = convertToModelSpace(x, y, z);
+    float starX = modelCoords[0], starY = modelCoords[1], starZ = modelCoords[2];
     
     long ledSearchStart = System.nanoTime();
     float minDistanceSquared = Float.MAX_VALUE;
@@ -498,8 +503,6 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     // Use spatial grid to find nearby LEDs only
     // Search radius of 30 units should be enough to find closest LED
     List<LXPoint> nearbyLEDs = ledGrid.getNearbyLEDs(starX, starY, starZ, 30.0f);
-    totalLEDsSearched += nearbyLEDs.size();
-    totalStarsRendered++;
     
     // Find closest LED among nearby candidates (filtered by surface toggles)
     for (LXPoint p : nearbyLEDs) {
@@ -519,8 +522,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
         closestIndex = p.index;
       }
     }
-    long ledSearchEnd = System.nanoTime();
-    totalFindLEDTime += (ledSearchEnd - ledSearchStart);
+    trackLEDSearchPerformance(ledSearchStart, nearbyLEDs.size());
     
     // Always render to the closest LED (both exterior and interior for cube only)
     if (closestIndex >= 0) {
@@ -538,124 +540,9 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
   }
   
-  // Mode 1: Multi-surface rendering - render to closest LED on cube AND cylinder
-  private void renderStarMultiSurface(float x, float y, float z, int color, float brightness) {
-    // Quick bounds check
-    if (x < 0 || x > 1 || y < 0 || y > 1 || z < 0 || z > 1) return;
-    
-    // Convert star position from normalized space to model space
-    float starX = x * (model.xMax - model.xMin) + model.xMin;
-    float starY = y * (model.yMax - model.yMin) + model.yMin;
-    float starZ = z * (model.zMax - model.zMin) + model.zMin;
-    
-    long ledSearchStart = System.nanoTime();
-    
-    // Use spatial grid to find nearby LEDs
-    List<LXPoint> nearbyLEDs = ledGrid.getNearbyLEDs(starX, starY, starZ, 30.0f);
-    totalLEDsSearched += nearbyLEDs.size();
-    totalStarsRendered++;
-    
-    // Find closest LED on cube faces AND closest on cylinder
-    float minCubeDistSquared = Float.MAX_VALUE;
-    float minCylinderDistSquared = Float.MAX_VALUE;
-    int closestCubeIndex = -1;
-    int closestCylinderIndex = -1;
-    
-    for (LXPoint p : nearbyLEDs) {
-      float dx = p.x - starX;
-      float dy = p.y - starY;
-      float dz = p.z - starZ;
-      float distanceSquared = dx*dx + dy*dy + dz*dz;
-      
-      // Determine if this LED is on cube or cylinder based on position
-      // This is a rough heuristic - cube LEDs are at the corners/edges
-      boolean isCubeLED = isPointOnCube(p);
-      
-      if (isCubeLED && distanceSquared < minCubeDistSquared) {
-        minCubeDistSquared = distanceSquared;
-        closestCubeIndex = p.index;
-      } else if (!isCubeLED && distanceSquared < minCylinderDistSquared) {
-        minCylinderDistSquared = distanceSquared;
-        closestCylinderIndex = p.index;
-      }
-    }
-    
-    long ledSearchEnd = System.nanoTime();
-    totalFindLEDTime += (ledSearchEnd - ledSearchStart);
-    
-    // Render to surfaces based on toggles (exterior and interior for cube only)
-    int finalColor = LXColor.scaleBrightness(color, brightness);
-    if (closestCubeIndex >= 0 && renderToCube.isOn()) {
-      colors[closestCubeIndex] = LXColor.blend(colors[closestCubeIndex], finalColor, LXColor.Blend.ADD);
-      // Also render to corresponding exterior/interior LED for cube
-      int correspondingCubeIndex = findCorrespondingLED(closestCubeIndex, true);
-      if (correspondingCubeIndex >= 0) {
-        colors[correspondingCubeIndex] = LXColor.blend(colors[correspondingCubeIndex], finalColor, LXColor.Blend.ADD);
-      }
-    }
-    if (closestCylinderIndex >= 0 && renderToCylinder.isOn()) {
-      // Cylinder renders to single surface only
-      colors[closestCylinderIndex] = LXColor.blend(colors[closestCylinderIndex], finalColor, LXColor.Blend.ADD);
-    }
-  }
-  
-  // Mode 2: Fixed viewpoint rendering - project from outside cube viewpoint
-  private void renderStarFixedViewpoint(float x, float y, float z, int color, float brightness) {
-    // Quick bounds check
-    if (x < 0 || x > 1 || y < 0 || y > 1 || z < 0 || z > 1) return;
-    
-    // Convert star position from normalized space to model space
-    float starX = x * (model.xMax - model.xMin) + model.xMin;
-    float starY = y * (model.yMax - model.yMin) + model.yMin;
-    float starZ = z * (model.zMax - model.zMin) + model.zMin;
-    
-    long ledSearchStart = System.nanoTime();
-    
-    // Fixed viewpoint from outside cube (viewing from positive X direction)
-    // Project star onto the front face (positive X face) of the cube
-    List<LXPoint> nearbyLEDs = ledGrid.getNearbyLEDs(starX, starY, starZ, 50.0f);
-    totalLEDsSearched += nearbyLEDs.size();
-    totalStarsRendered++;
-    
-    float minDistanceSquared = Float.MAX_VALUE;
-    int closestIndex = -1;
-    
-    // Only consider LEDs that are on the front face (cube exterior)
-    for (LXPoint p : nearbyLEDs) {
-      if (isPointOnCubeFrontFace(p)) {
-        // Project star position onto the front face plane
-        float projectedX = model.xMax; // Front face X position
-        float dx = p.x - projectedX;
-        float dy = p.y - starY;
-        float dz = p.z - starZ;
-        float distanceSquared = dx*dx + dy*dy + dz*dz;
-        
-        if (distanceSquared < minDistanceSquared) {
-          minDistanceSquared = distanceSquared;
-          closestIndex = p.index;
-        }
-      }
-    }
-    
-    long ledSearchEnd = System.nanoTime();
-    totalFindLEDTime += (ledSearchEnd - ledSearchStart);
-    
-    // Render to front face (only if cube rendering is enabled)
-    if (closestIndex >= 0 && renderToCube.isOn()) {
-      int finalColor = LXColor.scaleBrightness(color, brightness);
-      colors[closestIndex] = LXColor.blend(colors[closestIndex], finalColor, LXColor.Blend.ADD);
-    }
-  }
-  
   // Helper method to determine if a point is on the cube (vs cylinder) - optimized
   private boolean isPointOnCube(LXPoint p) {
     return cubeLedsMap.getOrDefault(p.index, false);
-  }
-  
-  // Helper method to determine if a point is on the front face of the cube
-  private boolean isPointOnCubeFrontFace(LXPoint p) {
-    // Front face is at maximum X coordinate
-    return isPointOnCube(p) && p.x > (model.xMax - 10); // Within 10 units of front face
   }
   
   // Pre-compute LED mappings once for performance
@@ -734,7 +621,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     // Visual controls
     addColumn(uiDevice, "Visual",
       newKnob(pattern.brightness),
-      newDropMenu(pattern.renderMode)).setChildSpacing(6);
+      newKnob(pattern.starSize)).setChildSpacing(6);
       
     addVerticalBreak(ui, uiDevice);
     
