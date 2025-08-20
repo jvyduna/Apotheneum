@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Debugging & Logs
+
+- **Log files location**: `~/Chromatik/Logs` - Check here for console output and debug messages from patterns
+- **Logging in patterns**: Use `LX.log("message")` instead of `System.out.println()` to ensure messages appear in Chromatik log files
+- **System.out.println**: Does NOT appear in Chromatik log files - always use `LX.log()` for debugging output
+
 ## Project Overview
 
 Apotheneum is a visual, sonic and haptic instrument for immersive LED art installations. It consists of two nested chambers (cube and cylinder) with 13,280 LED nodes total, built on the Chromatik Digital Lighting Workstation framework.
@@ -36,6 +42,21 @@ The installation has doors that affect pixel availability:
 - Pattern rendering methods are called sequentially, not concurrently
 - Synchronization adds unnecessary overhead and can cause performance issues
 - Use standard Java collections and data structures without thread safety concerns
+
+### Pattern Lifecycle and Activation
+
+- **The LX framework automatically handles pattern activation** - Only the currently active pattern on a channel has its `run()` method called
+- **No need to manually check if pattern is enabled** - When a pattern becomes inactive, its render methods stop being called entirely
+- **For optional animation control**, use parameter-based early returns like ImagePattern's `gifAnimating` parameter:
+  ```java
+  public void animateGif(double deltaMs) {
+    if (!this.animationEnabled.isOn()) {
+      return; // Skip animation updates when parameter is off
+    }
+    // ... animation logic continues only if enabled
+  }
+  ```
+- **Pattern activation is managed at the framework level** - No need for manual `enabled` checks in render methods
 
 ### Performance Best Practices
 
@@ -78,6 +99,38 @@ The installation has doors that affect pixel availability:
 - Access points via `orientation.point(x, y)` or `orientation.column(x).points[y]`
 - Use `Ring` objects for circular operations around cube/cylinder
 - Faces are ordered: front, right, back, left (clockwise when viewed from above)
+
+### Door Handling
+
+**Door columns have reduced points** - They are physically cut short at the door height:
+- Use `cube.exterior.available(globalColumnIndex)` to check available height per column
+- Door columns return fewer than `GRID_HEIGHT` or `CYLINDER_HEIGHT` points
+- **Global column indexing**: For cube faces, use `face * GRID_WIDTH + localColumn` for global indexing
+- **Vertical traversal**: Use adjacent full columns for going up/down around doors
+- **Path building**: When tracing edges around doors:
+  - Use last full column before door for ascending
+  - Traverse across tops of door columns (shortened columns)
+  - Use first full column after door for descending
+
+### Model Structure
+
+- **Cube.Face.columns[]**: Array of `LXModel` objects (not `Face.Column` type)
+- **Cylinder.exterior.columns[]**: Array of `LXModel` objects  
+- **Points access**: Use `column.points[y]` directly on `LXModel`
+- **Point indexing**: Y=0 is top, Y=max is bottom (inverted from typical coordinate system)
+
+### 3D Distance Calculations
+
+For thickness effects that span multiple surfaces:
+```java
+double dist3D = Math.sqrt(
+    Math.pow(point.x - pathPoint.x, 2) +
+    Math.pow(point.y - pathPoint.y, 2) +
+    Math.pow(point.z - pathPoint.z, 2)
+);
+```
+- Iterate through `model.points` to find all LEDs within radius
+- Use hard vs soft edges by controlling falloff calculations
 
 ### Common Utilities
 
