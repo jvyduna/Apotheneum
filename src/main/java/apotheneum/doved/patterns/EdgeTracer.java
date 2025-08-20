@@ -505,18 +505,22 @@ public class EdgeTracer extends ApotheneumPattern {
         // Clear and reuse pre-allocated buffer instead of creating new ArrayList
         activePointsBuffer.clear();
         
-        // Get the points along the path that should be lit (length control)
-        for (int i = 0; i < pathLength; i++) {
-            // Calculate distance considering wrap-around
-            double distance = Math.min(
-                Math.abs(i - centerPoint),
-                Math.min(Math.abs(i - centerPoint + pathLength),
-                         Math.abs(i - centerPoint - pathLength))
-            );
+        // Get the points along the path that should be lit (trailing behavior)
+        // Trail extends backwards from current position, clipped at start
+        // Add small offset so position 0 starts after the first corner, not at it
+        int currentIndex = (int) Math.floor(centerPoint + 1) % pathLength;
+        
+        for (int i = 0; i < lengthInPoints && i < pathLength; i++) {
+            // Calculate the index starting from current position and going backwards
+            // i=0 is the current position, i=1 is one step behind, etc.
+            int trailIndex = currentIndex - i;
             
-            if (distance < lengthInPoints / 2) {
-                activePointsBuffer.add(path.get(i));
+            // Clip at the beginning - don't wrap around
+            if (trailIndex < 0) {
+                break; // Stop adding points when we reach the beginning
             }
+            
+            activePointsBuffer.add(path.get(trailIndex));
         }
         
         // Pre-calculate color once
