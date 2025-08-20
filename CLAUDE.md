@@ -5,6 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Debugging & Logs
 
 - **Log files location**: `~/Chromatik/Logs` - Check here for console output and debug messages from patterns
+- **Logging in patterns**: Use `LX.log("message")` instead of `System.out.println()` to ensure messages appear in Chromatik log files
+- **System.out.println**: Does NOT appear in Chromatik log files - always use `LX.log()` for debugging output
 
 ## Project Overview
 

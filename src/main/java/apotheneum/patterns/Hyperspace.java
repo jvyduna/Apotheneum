@@ -12,7 +12,9 @@ import heronarts.lx.studio.LXStudio.UI;
 import heronarts.lx.studio.ui.device.UIDevice;
 import heronarts.lx.studio.ui.device.UIDeviceControls;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @LXCategory("Apotheneum")
 @LXComponentName("Hyperspace")
@@ -185,8 +187,105 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
   }
   
+  // LED Spatial grid for efficient nearest-neighbor search
+  private static class LEDSpatialGrid {
+    private final float cellSize;
+    private final Map<Long, List<LXPoint>> grid;
+    private final int gridWidth, gridHeight, gridDepth;
+    private final float xMin, yMin, zMin;
+    private final float xMax, yMax, zMax;
+    
+    LEDSpatialGrid(LXPoint[] points, float cellSize) {
+      this.cellSize = cellSize;
+      this.grid = new HashMap<>();
+      
+      // Find bounds
+      float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, minZ = Float.MAX_VALUE;
+      float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE, maxZ = Float.MIN_VALUE;
+      
+      for (LXPoint p : points) {
+        minX = Math.min(minX, p.x);
+        minY = Math.min(minY, p.y);
+        minZ = Math.min(minZ, p.z);
+        maxX = Math.max(maxX, p.x);
+        maxY = Math.max(maxY, p.y);
+        maxZ = Math.max(maxZ, p.z);
+      }
+      
+      // Store bounds with some padding
+      this.xMin = minX - cellSize;
+      this.yMin = minY - cellSize;
+      this.zMin = minZ - cellSize;
+      this.xMax = maxX + cellSize;
+      this.yMax = maxY + cellSize;
+      this.zMax = maxZ + cellSize;
+      
+      // Calculate grid dimensions
+      this.gridWidth = (int) Math.ceil((xMax - xMin + 2 * cellSize) / cellSize);
+      this.gridHeight = (int) Math.ceil((yMax - yMin + 2 * cellSize) / cellSize);
+      this.gridDepth = (int) Math.ceil((zMax - zMin + 2 * cellSize) / cellSize);
+      
+      // Add all points to grid
+      for (LXPoint p : points) {
+        long key = getCellKey(p.x, p.y, p.z);
+        List<LXPoint> cell = grid.computeIfAbsent(key, k -> new ArrayList<>());
+        cell.add(p);
+      }
+      
+      LX.log(String.format("LED Spatial Grid initialized: %d cells, %d LEDs, grid size %dx%dx%d", 
+        grid.size(), points.length, gridWidth, gridHeight, gridDepth));
+    }
+    
+    List<LXPoint> getNearbyLEDs(float x, float y, float z, float radius) {
+      List<LXPoint> nearbyLEDs = new ArrayList<>();
+      
+      // Calculate cell range to search
+      int minGridX = Math.max(0, (int) Math.floor((x - radius - xMin) / cellSize));
+      int maxGridX = Math.min(gridWidth - 1, (int) Math.ceil((x + radius - xMin) / cellSize));
+      int minGridY = Math.max(0, (int) Math.floor((y - radius - yMin) / cellSize));
+      int maxGridY = Math.min(gridHeight - 1, (int) Math.ceil((y + radius - yMin) / cellSize));
+      int minGridZ = Math.max(0, (int) Math.floor((z - radius - zMin) / cellSize));
+      int maxGridZ = Math.min(gridDepth - 1, (int) Math.ceil((z + radius - zMin) / cellSize));
+      
+      // Search cells in range
+      for (int gx = minGridX; gx <= maxGridX; gx++) {
+        for (int gy = minGridY; gy <= maxGridY; gy++) {
+          for (int gz = minGridZ; gz <= maxGridZ; gz++) {
+            long key = getKey(gx, gy, gz);
+            List<LXPoint> cell = grid.get(key);
+            if (cell != null) {
+              nearbyLEDs.addAll(cell);
+            }
+          }
+        }
+      }
+      
+      return nearbyLEDs;
+    }
+    
+    private long getCellKey(float x, float y, float z) {
+      int gx = Math.max(0, Math.min(gridWidth - 1, (int) Math.floor((x - xMin) / cellSize)));
+      int gy = Math.max(0, Math.min(gridHeight - 1, (int) Math.floor((y - yMin) / cellSize)));
+      int gz = Math.max(0, Math.min(gridDepth - 1, (int) Math.floor((z - zMin) / cellSize)));
+      return getKey(gx, gy, gz);
+    }
+    
+    private long getKey(int gx, int gy, int gz) {
+      return ((long) gx << 42) | ((long) gy << 21) | gz;
+    }
+  }
+  
   private final List<Star> stars = new ArrayList<>();
   private LXPoint[] allPoints; // Cache of all LED points for targeting
+  private LEDSpatialGrid ledGrid; // Spatial grid for efficient LED search
+  
+  // Performance monitoring
+  private long frameCount = 0;
+  private long totalUpdateTime = 0;
+  private long totalRenderTime = 0;
+  private long totalFindLEDTime = 0;
+  private long totalLEDsSearched = 0;
+  private long totalStarsRendered = 0;
   
   public final CompoundParameter speed = new CompoundParameter("Speed", 0.5, 0.1, 50.0)
     .setDescription("Speed of hyperspace travel");
@@ -232,6 +331,10 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     // Cache all LED points for star targeting
     allPoints = model.points;
     
+    // Initialize LED spatial grid for efficient nearest-neighbor search
+    // Cell size of 10 units seems reasonable for the installation scale
+    ledGrid = new LEDSpatialGrid(allPoints, 10.0f);
+    
     updateStarCount();
   }
   
@@ -262,6 +365,8 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
   
   @Override
   protected void run(double deltaMs) {
+    long frameStartTime = System.nanoTime();
+    
     // Update pulse phase
     if (pulse.isOn()) {
       pulsePhase += deltaMs * 0.003;
@@ -275,6 +380,7 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
     
     // Update all stars
+    long updateStartTime = System.nanoTime();
     double maxLifespan = duration.getValue();
     int axis = (int)motionAxis.getValue();
     float direction = (float)motionDirection.getValue();
@@ -282,6 +388,8 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     for (Star star : stars) {
       star.update(deltaMs, currentSpeed, maxLifespan, axis, direction);
     }
+    long updateEndTime = System.nanoTime();
+    totalUpdateTime += (updateEndTime - updateStartTime);
     
     // Clear all points first
     for (LXPoint p : model.points) {
@@ -289,7 +397,9 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     }
     
     // Now render each star as a sharp point
+    long renderStartTime = System.nanoTime();
     float brightnessMult = (float)brightness.getValue();
+    int starsRendered = 0;
     
     for (Star star : stars) {
       // Only render stars that are reasonably close to the visible cube
@@ -301,11 +411,38 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
         // Render the star
         float starBrightness = star.getBrightness() * brightnessMult;
         renderStarAtPoint(star.x, star.y, star.z, star.color, starBrightness);
+        starsRendered++;
       }
+    }
+    long renderEndTime = System.nanoTime();
+    totalRenderTime += (renderEndTime - renderStartTime);
+    
+    frameCount++;
+    
+    // Print performance stats every 60 frames (roughly 1 second at 60fps)
+    if (frameCount % 60 == 0) {
+      double avgUpdateMs = (totalUpdateTime / (double)frameCount) / 1_000_000.0;
+      double avgRenderMs = (totalRenderTime / (double)frameCount) / 1_000_000.0;
+      double avgFindLEDMs = (totalFindLEDTime / (double)frameCount) / 1_000_000.0;
+      double totalFrameMs = avgUpdateMs + avgRenderMs;
+      double avgLEDsPerStar = totalStarsRendered > 0 ? (double)totalLEDsSearched / totalStarsRendered : 0;
+      
+      LX.log(String.format(
+        "Hyperspace Performance - Stars: %d (rendered: %d) | Update: %.2fms | Render: %.2fms (LED search: %.2fms, avg %.0f LEDs/star) | Total: %.2fms | FPS potential: %.0f",
+        stars.size(), starsRendered, avgUpdateMs, avgRenderMs, avgFindLEDMs, avgLEDsPerStar, totalFrameMs, 1000.0 / totalFrameMs
+      ));
+      
+      // Reset counters
+      frameCount = 0;
+      totalUpdateTime = 0;
+      totalRenderTime = 0;
+      totalFindLEDTime = 0;
+      totalLEDsSearched = 0;
+      totalStarsRendered = 0;
     }
   }
   
-  // Efficient star rendering - finds closest LED in 3D space
+  // Efficient star rendering - finds closest LED in 3D space using spatial grid
   private void renderStarAtPoint(float x, float y, float z, int color, float brightness) {
     // Quick bounds check
     if (x < 0 || x > 1 || y < 0 || y > 1 || z < 0 || z > 1) return;
@@ -315,11 +452,18 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
     float starY = y * (model.yMax - model.yMin) + model.yMin;
     float starZ = z * (model.zMax - model.zMin) + model.zMin;
     
+    long ledSearchStart = System.nanoTime();
     float minDistanceSquared = Float.MAX_VALUE;
     int closestIndex = -1;
     
-    // Find closest LED using actual 3D coordinates - no distance limit
-    for (LXPoint p : model.points) {
+    // Use spatial grid to find nearby LEDs only
+    // Search radius of 30 units should be enough to find closest LED
+    List<LXPoint> nearbyLEDs = ledGrid.getNearbyLEDs(starX, starY, starZ, 30.0f);
+    totalLEDsSearched += nearbyLEDs.size();
+    totalStarsRendered++;
+    
+    // Find closest LED among nearby candidates
+    for (LXPoint p : nearbyLEDs) {
       float dx = p.x - starX;
       float dy = p.y - starY;
       float dz = p.z - starZ;
@@ -330,6 +474,8 @@ public class Hyperspace extends LXPattern implements UIDeviceControls<Hyperspace
         closestIndex = p.index;
       }
     }
+    long ledSearchEnd = System.nanoTime();
+    totalFindLEDTime += (ledSearchEnd - ledSearchStart);
     
     // Always render to the closest LED
     if (closestIndex >= 0) {
