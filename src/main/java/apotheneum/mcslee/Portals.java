@@ -72,6 +72,7 @@ public class Portals extends ApotheneumPattern {
 
   @Override
   protected void render(double deltaMs) {
+    setColors(LXColor.BLACK);
     setApotheneumColor(LXColor.BLACK);
     int i = 0;
     for (LXModel column : Apotheneum.cube.exterior.columns) {
