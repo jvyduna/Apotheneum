@@ -232,6 +232,7 @@ public class Raindrops extends ApotheneumPattern implements ApotheneumPattern.Mi
   @Override
   protected void render(double deltaMs) {
     setColors(LXColor.BLACK);
+    setApotheneumColor(LXColor.BLACK);
     this.surface = null;
     if (this.linkFloor.isOn()) {
       LXComponent parent = getParent();
