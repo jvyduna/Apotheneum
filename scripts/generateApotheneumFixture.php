@@ -359,14 +359,34 @@ for ($i = 0; $i < 20; ++$i) {
   }
   
   // Interior cube universe
+  // $output = '{
+  //     "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip",
+  //     "protocol": "artnet",
+  //     "host": "$cub'.$digit.'",
+  //     "universe": '.$univInt.',
+  //     "segments": ';
+  // $outputFlip = '{
+  //     "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip",
+  //     "protocol": "artnet",
+  //     "host": "$cub'.$digit.'",
+  //     "universe": '.$univInt.',
+  //     "segments": ';
   $output = '{
-      "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip",
+      "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip'.$not19.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univInt.',
       "segments": ';
+
   $outputFlip = '{
-      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip",
+      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$not19.'",
+      "protocol": "artnet",
+      "host": "$cub'.$digit.'",
+      "universe": '.$univInt.',
+      "segments": ';
+      
+  $outputHack = '{
+      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$is19.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univInt.',
@@ -397,6 +417,26 @@ for ($i = 0; $i < 20; ++$i) {
       ]
     }';
   $outputsFlip []= $outputFlip;
+  
+  if ($hasHack) {
+    $segmentsHack = array();
+    for ($s = 9; $s >= 0; --$s) {
+      $start = $i * 450 + $s * 45;
+      $num = ($i % 5 == 2) ? 34 : 45;
+      if ($s == 9) {
+        ++$start;
+        --$num;
+      }
+      
+      $reverse = ($s % 2 == 0) ? ', "reverse": true' : '';
+      $segmentsHack []= '{ "start": '.$start.', "num": '.$num.$reverse.' }';
+    }
+    $outputHack .= "[\n        ".join(",\n        ", $segmentsHack);
+    $outputHack .= '
+      ]
+    }';
+    $outputsFlip []= $outputHack;
+  }
 }
 
 // Cylinder outputs

@@ -1052,7 +1052,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & !$cub20Flip",
+      "enabled": "$cub20On & !$cub20Flip & !$hackCub20",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 117,
@@ -2222,7 +2222,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & $cub20Flip",
+      "enabled": "$cub20On & $cub20Flip & !$hackCub20",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 117,
@@ -2237,6 +2237,24 @@
         { "start": 17640, "num": 45, "reverse": true },
         { "start": 17595, "num": 45 },
         { "start": 17550, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub20On & $cub20Flip & $hackCub20",
+      "protocol": "artnet",
+      "host": "$cub20",
+      "universe": 117,
+      "segments": [
+        { "start": 8956, "num": 44 },
+        { "start": 8910, "num": 45, "reverse": true },
+        { "start": 8865, "num": 45 },
+        { "start": 8820, "num": 45, "reverse": true },
+        { "start": 8775, "num": 45 },
+        { "start": 8730, "num": 45, "reverse": true },
+        { "start": 8685, "num": 45 },
+        { "start": 8640, "num": 45, "reverse": true },
+        { "start": 8595, "num": 45 },
+        { "start": 8550, "num": 45, "reverse": true }
       ]
     },
     {
