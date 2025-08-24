@@ -1,6 +1,6 @@
 {
   "version": "1.1.1-SNAPSHOT",
-  "timestamp": 1755717434389,
+  "timestamp": 1755786447071,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -706,7 +706,7 @@
           "autoCycleMode": 1,
           "autoCycleMode/name": "RANDOM",
           "autoCycleTimeSecs": 47.0,
-          "autoCycleCursor": 3,
+          "autoCycleCursor": 14,
           "triggerSwatchCycle": false,
           "expandedPerformance": true,
           "label1": "1",
@@ -725,7 +725,7 @@
               "modulationsExpanded": true
             },
             "parameters": {
-              "label": "Cool",
+              "label": "Borealis",
               "recall": false,
               "autoCycleEligible": true
             },
@@ -746,7 +746,7 @@
                   "period": 30.0,
                   "primary/brightness": 100.0,
                   "primary/saturation": 100.0,
-                  "primary/hue": 182.625,
+                  "primary/hue": 0.0,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -767,8 +767,8 @@
                   "mode/name": "FIXED",
                   "period": 30.0,
                   "primary/brightness": 100.0,
-                  "primary/saturation": 82.24609375,
-                  "primary/hue": 220.91014099121094,
+                  "primary/saturation": 100.0,
+                  "primary/hue": 23.90625,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -790,7 +790,7 @@
                   "period": 30.0,
                   "primary/brightness": 100.0,
                   "primary/saturation": 100.0,
-                  "primary/hue": 240.0,
+                  "primary/hue": 270.515625,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -811,8 +811,8 @@
                   "mode/name": "FIXED",
                   "period": 30.0,
                   "primary/brightness": 100.0,
-                  "primary/saturation": 85.86588287353516,
-                  "primary/hue": 89.671875,
+                  "primary/saturation": 100.0,
+                  "primary/hue": 303.140625,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -834,7 +834,7 @@
                   "period": 30.0,
                   "primary/brightness": 100.0,
                   "primary/saturation": 100.0,
-                  "primary/hue": 0.0,
+                  "primary/hue": 229.55859375,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -3460,7 +3460,7 @@
           "label": "Mixer",
           "crossfader": 0.5,
           "crossfaderBlendMode": 0,
-          "focusedChannel": 7,
+          "focusedChannel": 0,
           "focusedChannelAux": 3,
           "cueA": false,
           "cueB": false,
@@ -3581,7 +3581,7 @@
               "label": "Global",
               "fader": 1.0,
               "arm": false,
-              "selected": false,
+              "selected": true,
               "stopClips": false,
               "enabled": true,
               "cue": false,
@@ -3610,7 +3610,7 @@
               "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 5,
+              "focusedPattern": 1,
               "triggerPatternCycle": false,
               "launchPatternCycle": false
             },
@@ -3634,7 +3634,7 @@
             },
             "effects": [],
             "clips": [],
-            "patternIndex": 2,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 10689933,
@@ -7107,7 +7107,7 @@
             },
             "parameters": {
               "label": "Melodies",
-              "fader": 1.0,
+              "fader": 0.0,
               "arm": false,
               "selected": false,
               "stopClips": false,
@@ -7492,7 +7492,7 @@
               "label": "Drop",
               "fader": 0.0,
               "arm": false,
-              "selected": true,
+              "selected": false,
               "stopClips": false,
               "enabled": true,
               "cue": false,
@@ -9389,13 +9389,13 @@
               "activeStep-3": false,
               "activeStep-4": false,
               "activeStep-5": false,
-              "activeStep-6": true,
+              "activeStep-6": false,
               "activeStep-7": false,
               "activeStep-8": false,
               "activeStep-9": false,
               "activeStep-10": false,
               "activeStep-11": false,
-              "activeStep-12": false,
+              "activeStep-12": true,
               "activeStep-13": false,
               "activeStep-14": false,
               "activeStep-15": false,
@@ -9418,7 +9418,7 @@
               "step-16": false
             },
             "children": {},
-            "basis": 0.21492100000000147
+            "basis": 0.7543433279999991
           },
           {
             "id": 10689798,
@@ -9458,13 +9458,13 @@
               "activeStep-3": false,
               "activeStep-4": false,
               "activeStep-5": false,
-              "activeStep-6": true,
+              "activeStep-6": false,
               "activeStep-7": false,
               "activeStep-8": false,
               "activeStep-9": false,
               "activeStep-10": false,
               "activeStep-11": false,
-              "activeStep-12": false,
+              "activeStep-12": true,
               "activeStep-13": false,
               "activeStep-14": false,
               "activeStep-15": false,
@@ -9487,7 +9487,7 @@
               "step-16": false
             },
             "children": {},
-            "basis": 0.21492100000000147
+            "basis": 0.7543433279999991
           },
           {
             "id": 10699535,
@@ -9972,8 +9972,8 @@
               "triggerIn": false,
               "inputChance": 1.0,
               "numOutputs": 5,
-              "mode": 2,
-              "mode/name": "CYCLE",
+              "mode": 1,
+              "mode/name": "RANDOM",
               "out1": false,
               "out2": false,
               "out3": false,
@@ -14547,16 +14547,18 @@
             "class": "heronarts.lx.midi.template.AkaiMidiMix",
             "internal": {
               "modulationColor": 0,
-              "modulationControlsExpanded": false,
-              "modulationsExpanded": true
+              "modulationControlsExpanded": true,
+              "modulationsExpanded": false
             },
             "parameters": {
               "label": "Akai MIDIMIX",
               "sourceDevice/index": 0,
+              "sourceDevice/name": "MIDI Mix",
               "destinationDevice/index": 0,
-              "knob-1-1": 0.0,
-              "knob-1-2": 0.0,
-              "knob-1-3": 0.0,
+              "destinationDevice/name": "MIDI Mix",
+              "knob-1-1": 0.3543307086614173,
+              "knob-1-2": 0.7007874015748031,
+              "knob-1-3": 0.28346456692913385,
               "knob-2-1": 0.0,
               "knob-2-2": 0.0,
               "knob-2-3": 0.0,
@@ -14581,7 +14583,7 @@
               "fader-1": 0.0,
               "fader-2": 0.0,
               "fader-3": 0.0,
-              "fader-4": 0.0,
+              "fader-4": 0.015748031496062992,
               "fader-5": 0.0,
               "fader-6": 0.0,
               "fader-7": 0.0,
@@ -14620,12 +14622,14 @@
             "internal": {
               "modulationColor": 17,
               "modulationControlsExpanded": true,
-              "modulationsExpanded": true
+              "modulationsExpanded": false
             },
             "parameters": {
               "label": "Akai MPD218",
               "sourceDevice/index": 0,
+              "sourceDevice/name": "MPD218",
               "destinationDevice/index": 0,
+              "destinationDevice/name": "MPD218",
               "pad-A1": false,
               "pad-A2": false,
               "pad-A3": false,
@@ -14642,7 +14646,7 @@
               "pad-A14": false,
               "pad-A15": false,
               "pad-A16": false,
-              "knob-A1": 0.011640625074505806,
+              "knob-A1": 0.031496062992125984,
               "knob-A2": 0.0,
               "knob-A3": 0.0,
               "knob-A4": 0.0,
@@ -14752,7 +14756,7 @@
           "active": true,
           "radius": 1049.0138068360075,
           "theta": 28.921756871662353,
-          "phi": 1.9894502217298822,
+          "phi": 2.1321432346826867,
           "x": 275.8415490309708,
           "y": 245.90844701603055,
           "z": 260.0573686197167

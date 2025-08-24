@@ -26,6 +26,7 @@
     "starsEnabled": { "type": "boolean", "default": true, "label": "Stars UI", "description": "Whether the stars are rendered" },
     "peopleEnabled": { "type": "boolean", "default": true, "label": "People UI", "description": "Whether people are rendered" },
     "hackCub20": { "type": "boolean", "default": false, "label": "Hack Cub20", "description": "Hack fix for net 20 hardware issue" },
+    "hackCub10": { "type": "boolean", "default": false, "label": "Hack Cub10", "description": "Hack fix for net 10 interior hardware issue" },
 <?php
 $params = array();
 for ($i = 1; $i <= 20; ++$i) {
@@ -281,32 +282,38 @@ for ($i = 0; $i < 20; ++$i) {
   $univExt = 6*$i;
   $univInt = 6*$i + 3;
 
-  $hasHack = false;
-  $not19 = '';
-  $is19 = '';
-  if ($i == 19) {
-    $hasHack = true;
-    $not19 = ' & !$hackCub20';
-    $is19 = ' & $hackCub20';
+  $hasExtHack = false;
+  $hasIntHack = false;
+  $notIntHack = $notExtHack = '';
+  $isIntHack = $isExtHack = '';
+  if ($i == 9) {
+    $hasIntHack = true;
+    $notIntHack = ' & !$hackCub10';
+    $isIntHack = ' & $hackCub10';
+  } else if ($i == 19) {
+    $hasExtHack = true;
+    $hasIntHack = true;
+    $notIntHack = $notExtHack = ' & !$hackCub20';
+    $isIntHack = $isExtHack = ' & $hackCub20';
   }
 
   // Exterior cube universe
   $output = '{
-      "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip'.$not19.'",
+      "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip'.$notExtHack.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univExt.',
       "segments": ';
 
   $outputFlip = '{
-      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$not19.'",
+      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$notExtHack.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univExt.',
       "segments": ';
       
   $outputHack = '{
-      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$is19.'",
+      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$isExtHack.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univExt.',
@@ -338,7 +345,7 @@ for ($i = 0; $i < 20; ++$i) {
     }';
   $outputsFlip []= $outputFlip;
   
-  if ($hasHack) {
+  if ($hasExtHack) {
     $segmentsHack = array();
     for ($s = 9; $s >= 0; --$s) {
       $start = $i * 450 + $s * 45;
@@ -372,21 +379,21 @@ for ($i = 0; $i < 20; ++$i) {
   //     "universe": '.$univInt.',
   //     "segments": ';
   $output = '{
-      "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip'.$not19.'",
+      "enabled": "$cub'.$digit.'On & !$cub'.$digit.'Flip'.$notIntHack.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univInt.',
       "segments": ';
 
   $outputFlip = '{
-      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$not19.'",
+      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$notIntHack.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univInt.',
       "segments": ';
       
   $outputHack = '{
-      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$is19.'",
+      "enabled": "$cub'.$digit.'On & $cub'.$digit.'Flip'.$isIntHack.'",
       "protocol": "artnet",
       "host": "$cub'.$digit.'",
       "universe": '.$univInt.',
@@ -418,7 +425,7 @@ for ($i = 0; $i < 20; ++$i) {
     }';
   $outputsFlip []= $outputFlip;
   
-  if ($hasHack) {
+  if ($hasIntHack) {
     $segmentsHack = array();
     for ($s = 9; $s >= 0; --$s) {
       $start = $i * 450 + $s * 45;

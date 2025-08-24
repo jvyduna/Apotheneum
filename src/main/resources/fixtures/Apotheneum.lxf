@@ -26,6 +26,7 @@
     "starsEnabled": { "type": "boolean", "default": true, "label": "Stars UI", "description": "Whether the stars are rendered" },
     "peopleEnabled": { "type": "boolean", "default": true, "label": "People UI", "description": "Whether people are rendered" },
     "hackCub20": { "type": "boolean", "default": false, "label": "Hack Cub20", "description": "Hack fix for net 20 hardware issue" },
+    "hackCub10": { "type": "boolean", "default": false, "label": "Hack Cub10", "description": "Hack fix for net 10 interior hardware issue" },
     "cub01On": { "type": "boolean", "default": true, "label": "CUB 01", "description": "CUB-01 Enabled" },
     "cub01Flip": { "type": "boolean", "default": true, "label": "CUB 01 Flip", "description": "CUB-01 Flip" },
     "cub01": { "type": "string", "default": "10.0.1.101", "label": "CUB 01 IP", "description": "CUB-01 IP address" },
@@ -692,7 +693,7 @@
       ]
     },
     {
-      "enabled": "$cub10On & !$cub10Flip",
+      "enabled": "$cub10On & !$cub10Flip & !$hackCub10",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 57,
@@ -1844,7 +1845,7 @@
       ]
     },
     {
-      "enabled": "$cub10On & $cub10Flip",
+      "enabled": "$cub10On & $cub10Flip & !$hackCub10",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 57,
@@ -1859,6 +1860,24 @@
         { "start": 13140, "num": 45, "reverse": true },
         { "start": 13095, "num": 45 },
         { "start": 13050, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub10On & $cub10Flip & $hackCub10",
+      "protocol": "artnet",
+      "host": "$cub10",
+      "universe": 57,
+      "segments": [
+        { "start": 4456, "num": 44 },
+        { "start": 4410, "num": 45, "reverse": true },
+        { "start": 4365, "num": 45 },
+        { "start": 4320, "num": 45, "reverse": true },
+        { "start": 4275, "num": 45 },
+        { "start": 4230, "num": 45, "reverse": true },
+        { "start": 4185, "num": 45 },
+        { "start": 4140, "num": 45, "reverse": true },
+        { "start": 4095, "num": 45 },
+        { "start": 4050, "num": 45, "reverse": true }
       ]
     },
     {
