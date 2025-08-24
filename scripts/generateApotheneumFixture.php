@@ -25,7 +25,7 @@
     "haloScale": { "type": "float", "min": 1, "default": 3200, "label": "Halo Scale", "description": "Size of light halo on groud" },
     "starsEnabled": { "type": "boolean", "default": true, "label": "Stars UI", "description": "Whether the stars are rendered" },
     "peopleEnabled": { "type": "boolean", "default": true, "label": "People UI", "description": "Whether people are rendered" },
-    "hackCub19": { "type": "boolean", "default": false, "label": "Hack Cub19", "description": "Hack fix for net 19 hardware issue" },
+    "hackCub20": { "type": "boolean", "default": false, "label": "Hack Cub20", "description": "Hack fix for net 20 hardware issue" },
 <?php
 $params = array();
 for ($i = 1; $i <= 20; ++$i) {
@@ -284,10 +284,10 @@ for ($i = 0; $i < 20; ++$i) {
   $hasHack = false;
   $not19 = '';
   $is19 = '';
-  if ($i == 18) {
+  if ($i == 19) {
     $hasHack = true;
-    $not19 = ' & !$hackCub19';
-    $is19 = ' & $hackCub19';
+    $not19 = ' & !$hackCub20';
+    $is19 = ' & $hackCub20';
   }
 
   // Exterior cube universe
