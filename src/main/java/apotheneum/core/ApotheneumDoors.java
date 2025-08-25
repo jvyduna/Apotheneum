@@ -45,17 +45,35 @@ public class ApotheneumDoors extends ApotheneumEffect {
     new BooleanParameter("Mute Doors", true)
     .setDescription("Mutes the doors");
 
+  public final BooleanParameter muteGlitch =
+    new BooleanParameter("Glitch 1", true)
+    .setDescription("Mutes the first cylinder glitch");
+
+  public final BooleanParameter muteGlitch2 =
+    new BooleanParameter("Glitch 2", true)
+    .setDescription("Mutes the second cylinder glitch");
+
   public ApotheneumDoors(LX lx) {
     super(lx);
     addParameter("mute", this.mute);
+    addParameter("muteGlitch", this.muteGlitch);
+    addParameter("muteGlitch2", this.muteGlitch2);
   }
 
   @Override
   protected void render(double deltaMs, double enabledAmount) {
-    if (!this.mute.isOn()) {
-      return;
+    if (this.mute.isOn()) {
+      muteDoors();
     }
+    if (this.muteGlitch.isOn()) {
+      muteGlitch(24020);
+    }
+    if (this.muteGlitch2.isOn()) {
+      muteGlitch(24880);
+    }
+  }
 
+  private void muteDoors() {
     for (int c = 0; c < DOOR_WIDTH; ++c) {
 
       // Mute cube face doors
@@ -81,6 +99,12 @@ public class ApotheneumDoors extends ApotheneumEffect {
       }
     }
 
+  }
+
+  private void muteGlitch(int start) {
+    for (int i = 0; i < 172; ++i) {
+      colors[start+i] = LXColor.BLACK;
+    }
   }
 
 }
