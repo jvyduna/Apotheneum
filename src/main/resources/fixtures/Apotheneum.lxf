@@ -1868,16 +1868,16 @@
       "host": "$cub10",
       "universe": 57,
       "segments": [
-        { "start": 4456, "num": 44 },
-        { "start": 4410, "num": 45, "reverse": true },
-        { "start": 4365, "num": 45 },
-        { "start": 4320, "num": 45, "reverse": true },
-        { "start": 4275, "num": 45 },
-        { "start": 4230, "num": 45, "reverse": true },
-        { "start": 4185, "num": 45 },
-        { "start": 4140, "num": 45, "reverse": true },
-        { "start": 4095, "num": 45 },
-        { "start": 4050, "num": 45, "reverse": true }
+        { "start": 13456, "num": 44 },
+        { "start": 13410, "num": 45, "reverse": true },
+        { "start": 13365, "num": 45 },
+        { "start": 13320, "num": 45, "reverse": true },
+        { "start": 13275, "num": 45 },
+        { "start": 13230, "num": 45, "reverse": true },
+        { "start": 13185, "num": 45 },
+        { "start": 13140, "num": 45, "reverse": true },
+        { "start": 13095, "num": 45 },
+        { "start": 13050, "num": 45, "reverse": true }
       ]
     },
     {
@@ -2264,16 +2264,16 @@
       "host": "$cub20",
       "universe": 117,
       "segments": [
-        { "start": 8956, "num": 44 },
-        { "start": 8910, "num": 45, "reverse": true },
-        { "start": 8865, "num": 45 },
-        { "start": 8820, "num": 45, "reverse": true },
-        { "start": 8775, "num": 45 },
-        { "start": 8730, "num": 45, "reverse": true },
-        { "start": 8685, "num": 45 },
-        { "start": 8640, "num": 45, "reverse": true },
-        { "start": 8595, "num": 45 },
-        { "start": 8550, "num": 45, "reverse": true }
+        { "start": 17956, "num": 44 },
+        { "start": 17910, "num": 45, "reverse": true },
+        { "start": 17865, "num": 45 },
+        { "start": 17820, "num": 45, "reverse": true },
+        { "start": 17775, "num": 45 },
+        { "start": 17730, "num": 45, "reverse": true },
+        { "start": 17685, "num": 45 },
+        { "start": 17640, "num": 45, "reverse": true },
+        { "start": 17595, "num": 45 },
+        { "start": 17550, "num": 45, "reverse": true }
       ]
     },
     {

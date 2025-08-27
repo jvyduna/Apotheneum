@@ -428,7 +428,7 @@ for ($i = 0; $i < 20; ++$i) {
   if ($hasIntHack) {
     $segmentsHack = array();
     for ($s = 9; $s >= 0; --$s) {
-      $start = $i * 450 + $s * 45;
+      $start = 9000 + $i * 450 + $s * 45;
       $num = ($i % 5 == 2) ? 34 : 45;
       if ($s == 9) {
         ++$start;
