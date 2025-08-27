@@ -1,6 +1,6 @@
 {
   "version": "1.1.1-SNAPSHOT",
-  "timestamp": 1756165350483,
+  "timestamp": 1756167167961,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -706,7 +706,7 @@
           "autoCycleMode": 1,
           "autoCycleMode/name": "RANDOM",
           "autoCycleTimeSecs": 47.0,
-          "autoCycleCursor": 2,
+          "autoCycleCursor": 9,
           "triggerSwatchCycle": false,
           "expandedPerformance": true,
           "label1": "1",
@@ -725,7 +725,7 @@
               "modulationsExpanded": true
             },
             "parameters": {
-              "label": "Deep",
+              "label": "Burn 2",
               "recall": false,
               "autoCycleEligible": true
             },
@@ -768,7 +768,7 @@
                   "period": 30.0,
                   "primary/brightness": 100.0,
                   "primary/saturation": 100.0,
-                  "primary/hue": 24.45703125,
+                  "primary/hue": 19.3359375,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -790,7 +790,7 @@
                   "period": 30.0,
                   "primary/brightness": 100.0,
                   "primary/saturation": 100.0,
-                  "primary/hue": 240.0,
+                  "primary/hue": 0.0,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -811,8 +811,8 @@
                   "mode/name": "FIXED",
                   "period": 30.0,
                   "primary/brightness": 100.0,
-                  "primary/saturation": 73.65885162353516,
-                  "primary/hue": 178.8984375,
+                  "primary/saturation": 100.0,
+                  "primary/hue": 233.39060974121094,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -833,8 +833,8 @@
                   "mode/name": "FIXED",
                   "period": 30.0,
                   "primary/brightness": 100.0,
-                  "primary/saturation": 55.47526168823242,
-                  "primary/hue": 147.90234375,
+                  "primary/saturation": 100.0,
+                  "primary/hue": 210.41015625,
                   "secondary/brightness": 100.0,
                   "secondary/saturation": 100.0,
                   "secondary/hue": 120.0
@@ -3460,7 +3460,7 @@
           "label": "Mixer",
           "crossfader": 0.5,
           "crossfaderBlendMode": 0,
-          "focusedChannel": 2,
+          "focusedChannel": 0,
           "focusedChannelAux": 3,
           "cueA": false,
           "cueB": false,
@@ -3581,9 +3581,9 @@
             },
             "parameters": {
               "label": "Global",
-              "fader": 0.0,
+              "fader": 1.0,
               "arm": false,
-              "selected": false,
+              "selected": true,
               "stopClips": false,
               "enabled": true,
               "cue": false,
@@ -3612,7 +3612,7 @@
               "transitionEnabled": true,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 5,
+              "focusedPattern": 6,
               "triggerPatternCycle": false,
               "launchPatternCycle": false
             },
@@ -3636,7 +3636,7 @@
             },
             "effects": [],
             "clips": [],
-            "patternIndex": 5,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 10689933,
@@ -4398,7 +4398,7 @@
                   "modulationExpanded": false
                 },
                 "parameters": {
-                  "label": "Hourglass",
+                  "label": "Orbox",
                   "midiFilter/enabled": true,
                   "midiFilter/channel": 16,
                   "midiFilter/channel/name": "OMNI",
@@ -5364,9 +5364,9 @@
             },
             "parameters": {
               "label": "Cylinder",
-              "fader": 1.0,
+              "fader": 0.0,
               "arm": false,
-              "selected": true,
+              "selected": false,
               "stopClips": false,
               "enabled": true,
               "cue": false,
@@ -7980,7 +7980,7 @@
             },
             "effects": [],
             "clips": [],
-            "patternIndex": 0,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 10689994,
@@ -13757,9 +13757,9 @@
               "activeStep-4": false,
               "activeStep-5": false,
               "activeStep-6": false,
-              "activeStep-7": false,
+              "activeStep-7": true,
               "activeStep-8": false,
-              "activeStep-9": true,
+              "activeStep-9": false,
               "activeStep-10": false,
               "activeStep-11": false,
               "activeStep-12": false,
@@ -13785,7 +13785,7 @@
               "step-16": false
             },
             "children": {},
-            "basis": 0.8064229920000215
+            "basis": 0.39782499199998833
           },
           {
             "id": 10689798,
@@ -13826,9 +13826,9 @@
               "activeStep-4": false,
               "activeStep-5": false,
               "activeStep-6": false,
-              "activeStep-7": false,
+              "activeStep-7": true,
               "activeStep-8": false,
-              "activeStep-9": true,
+              "activeStep-9": false,
               "activeStep-10": false,
               "activeStep-11": false,
               "activeStep-12": false,
@@ -13854,7 +13854,7 @@
               "step-16": false
             },
             "children": {},
-            "basis": 0.8064229920000215
+            "basis": 0.39782499199998833
           },
           {
             "id": 10699535,
@@ -21591,7 +21591,7 @@
             "class": "heronarts.lx.midi.template.AkaiMidiMix",
             "internal": {
               "modulationColor": 0,
-              "modulationControlsExpanded": true,
+              "modulationControlsExpanded": false,
               "modulationsExpanded": false
             },
             "parameters": {
@@ -21665,7 +21665,7 @@
             "class": "heronarts.lx.midi.template.AkaiMPD218",
             "internal": {
               "modulationColor": 17,
-              "modulationControlsExpanded": true,
+              "modulationControlsExpanded": false,
               "modulationsExpanded": true
             },
             "parameters": {
@@ -21690,11 +21690,11 @@
               "pad-A14": false,
               "pad-A15": false,
               "pad-A16": false,
-              "knob-A1": 1.0,
-              "knob-A2": 1.0,
-              "knob-A3": 0.998046875,
-              "knob-A4": 0.9951562499627471,
-              "knob-A5": 1.0,
+              "knob-A1": 0.0,
+              "knob-A2": 0.0,
+              "knob-A3": 0.0,
+              "knob-A4": 0.0,
+              "knob-A5": 0.0,
               "knob-A6": 0.0,
               "pad-B1": false,
               "pad-B2": false,
@@ -21799,8 +21799,8 @@
         "camera": {
           "active": true,
           "radius": 840.1726929082175,
-          "theta": 277.23186616270254,
-          "phi": 1.1759109781958728,
+          "theta": 357.65075452296446,
+          "phi": -0.8569473954013915,
           "x": 275.8415490309708,
           "y": 245.90844701603055,
           "z": 260.0573686197167
