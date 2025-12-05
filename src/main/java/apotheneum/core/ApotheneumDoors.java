@@ -60,8 +60,8 @@ public class ApotheneumDoors extends ApotheneumEffect {
   public ApotheneumDoors(LX lx) {
     super(lx);
     addParameter("mute", this.mute);
-    addParameter("muteGlitch", this.muteGlitch);
-    addParameter("muteGlitch2", this.muteGlitch2);
+//    addParameter("muteGlitch", this.muteGlitch);
+//    addParameter("muteGlitch2", this.muteGlitch2);
     addParameter("muteGlitch3", this.muteGlitch3);
   }
 
@@ -72,16 +72,19 @@ public class ApotheneumDoors extends ApotheneumEffect {
     }
 
     final int interiorStart = 45*50*8 + 43*120; // 23160
-    final int panelSize = 43*5; // 215
+    final int panelSize = 43*10; // 430
 
-    if (this.muteGlitch.isOn()) {
-      muteGlitch(interiorStart+4*panelSize);
-    }
-    if (this.muteGlitch2.isOn()) {
-      muteGlitch(interiorStart+8*panelSize);
-    }
+//    BM 2025
+//    if (this.muteGlitch.isOn()) {
+//      muteGlitch(interiorStart+2*panelSize);
+//    }
+//    if (this.muteGlitch2.isOn()) {
+//      muteGlitch(interiorStart+4*panelSize);
+//    }
+
+    // MIAMI 2025
     if (this.muteGlitch3.isOn()) {
-      muteGlitch(interiorStart+16*panelSize);
+      muteGlitch(interiorStart+8*panelSize);
     }
   }
 
