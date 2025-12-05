@@ -25,14 +25,14 @@
     "haloScale": { "type": "float", "min": 1, "default": 3200, "label": "Halo Scale", "description": "Size of light halo on groud" },
     "starsEnabled": { "type": "boolean", "default": true, "label": "Stars UI", "description": "Whether the stars are rendered" },
     "peopleEnabled": { "type": "boolean", "default": true, "label": "People UI", "description": "Whether people are rendered" },
-    "hackCub20": { "type": "boolean", "default": false, "label": "Hack Cub20", "description": "Hack fix for net 20 hardware issue" },
-    "hackCub10": { "type": "boolean", "default": false, "label": "Hack Cub10", "description": "Hack fix for net 10 interior hardware issue" },
 <?php
 $params = array();
 for ($i = 1; $i <= 20; ++$i) {
   $digit = sprintf("%02d", $i);
   $params []= '"cub'.$digit.'On": { "type": "boolean", "default": true, "label": "CUB '.$digit.'", "description": "CUB-'.$digit.' Enabled" }';
   $params []= '"cub'.$digit.'Flip": { "type": "boolean", "default": true, "label": "CUB '.$digit.' Flip", "description": "CUB-'.$digit.' Flip" }';
+  $params []= '"cub'.$digit.'HackInt": { "type": "boolean", "default": false, "label": "CUB '.$digit.' IHack", "description": "CUB-'.$digit.' Hack Int" }';
+  $params []= '"cub'.$digit.'HackExt": { "type": "boolean", "default": false, "label": "CUB '.$digit.' EHack", "description": "CUB-'.$digit.' Hack Ext" }';  
   $params []= '"cub'.$digit.'": { "type": "string", "default": "10.0.1.1'.$digit.'", "label": "CUB '.$digit.' IP", "description": "CUB-'.$digit.' IP address" }';
 }
 for ($i = 1; $i <= 12; ++$i) {
@@ -40,6 +40,7 @@ for ($i = 1; $i <= 12; ++$i) {
   $ip = sprintf("%02d", 20 + $i);
   $params []= '"cyl'.$digit.'On": { "type": "boolean", "default": true, "label": "CYL '.$digit.'", "description": "CYL-'.$digit.' Enabled" }';
   $params []= '"cyl'.$digit.'Flip": { "type": "boolean", "default": true, "label": "CYL '.$digit.' Flip", "description": "CYL-'.$digit.' Flip" }';
+  $params []= '"cyl'.$digit.'B2F": { "type": "boolean", "default": false, "label": "CYL '.$digit.' B2F", "description": "CYL-'.$digit.' Back to Front" }';  
   $params []= '"cyl'.$digit.'": { "type": "string", "default": "10.0.1.1'.$ip.'", "label": "CYL '.$digit.' IP", "description": "CYL-'.$digit.' IP address" }';
 }
 echo '    '.join(",\n    ", $params)."\n";
@@ -282,20 +283,25 @@ for ($i = 0; $i < 20; ++$i) {
   $univExt = 6*$i;
   $univInt = 6*$i + 3;
 
-  $hasExtHack = false;
-  $hasIntHack = false;
-  $notIntHack = $notExtHack = '';
-  $isIntHack = $isExtHack = '';
-  if ($i == 9) {
-    $hasIntHack = true;
-    $notIntHack = ' & !$hackCub10';
-    $isIntHack = ' & $hackCub10';
-  } else if ($i == 19) {
-    $hasExtHack = true;
-    $hasIntHack = true;
-    $notIntHack = $notExtHack = ' & !$hackCub20';
-    $isIntHack = $isExtHack = ' & $hackCub20';
-  }
+  $hasIntHack = true;
+  $hasExtHack = true;
+  // $notIntHack = $notExtHack = '';
+  // $isIntHack = $isExtHack = '';
+  $notIntHack = ' & !$cub'.$digit.'HackInt';
+  $isIntHack = ' & $cub'.$digit.'HackInt';
+  $notExtHack = ' & !$cub'.$digit.'HackExt';
+  $isExtHack = ' & $cub'.$digit.'HackExt';
+  
+// if ($i == 9) {
+//     $hasIntHack = true;
+//     $notIntHack = ' & !$hackCub10';
+//     $isIntHack = ' & $hackCub10';
+//   } else if ($i == 19) {
+//     $hasExtHack = true;
+//     $hasIntHack = true;
+//     $notIntHack = $notExtHack = ' & !$hackCub20';
+//     $isIntHack = $isExtHack = ' & $hackCub20';
+//   }
 
   // Exterior cube universe
   $output = '{
@@ -472,9 +478,16 @@ for ($i = 0; $i < 12; ++$i) {
       "universe": '.$univExt.',
       "segments": ';
 
+  $sInt = 18000;
+  $sExt = 23160;
+  if ($i == 6) { // cyl07 back to front
+    $sInt = 23160;
+    $sExt = 18000;
+  }
+
   $segments = array();
   for ($s = 0; $s < 10; ++$s) {
-    $start = 18000 + $i * 430 + $s * 43;
+    $start = $sInt + $i * 430 + $s * 43;
     $num = ($d % 3 == 2) ? 32 : 43;
     $reverse = ($s % 2 == 1) ? ', "reverse": true' : '';
     $segments []= '{ "start": '.$start.', "num": '.$num.$reverse.' }';
@@ -487,7 +500,7 @@ for ($i = 0; $i < 12; ++$i) {
   
   $segmentsFlip = array();
   for ($s = 9; $s >= 0; --$s) {
-    $start = 18000 + $i * 430 + $s * 43;
+    $start = $sInt + $i * 430 + $s * 43;
     $num = ($d % 3 == 2) ? 32 : 43;
     $reverse = ($s % 2 == 0) ? ', "reverse": true' : '';
     $segmentsFlip []= '{ "start": '.$start.', "num": '.$num.$reverse.' }';
@@ -515,7 +528,7 @@ for ($i = 0; $i < 12; ++$i) {
       
   $segments = array();
   for ($s = 0; $s < 10; ++$s) {
-    $start = 23160 + $i * 430 + $s * 43;
+    $start = $sExt + $i * 430 + $s * 43;
     $num = ($d % 3 == 2) ? 32 : 43;
     $reverse = ($s % 2 == 1) ? ', "reverse": true' : '';
     $segments []= '{ "start": '.$start.', "num": '.$num.$reverse.' }';
@@ -528,7 +541,7 @@ for ($i = 0; $i < 12; ++$i) {
   
   $segmentsFlip = array();
   for ($s = 9; $s >= 0; --$s) {
-    $start = 23160 + $i * 430 + $s * 43;
+    $start = $sExt + $i * 430 + $s * 43;
     $num = ($d % 3 == 2) ? 32 : 43;
     $reverse = ($s % 2 == 0) ? ', "reverse": true' : '';
     $segmentsFlip []= '{ "start": '.$start.', "num": '.$num.$reverse.' }';

@@ -25,103 +25,153 @@
     "haloScale": { "type": "float", "min": 1, "default": 3200, "label": "Halo Scale", "description": "Size of light halo on groud" },
     "starsEnabled": { "type": "boolean", "default": true, "label": "Stars UI", "description": "Whether the stars are rendered" },
     "peopleEnabled": { "type": "boolean", "default": true, "label": "People UI", "description": "Whether people are rendered" },
-    "hackCub20": { "type": "boolean", "default": false, "label": "Hack Cub20", "description": "Hack fix for net 20 hardware issue" },
-    "hackCub10": { "type": "boolean", "default": false, "label": "Hack Cub10", "description": "Hack fix for net 10 interior hardware issue" },
     "cub01On": { "type": "boolean", "default": true, "label": "CUB 01", "description": "CUB-01 Enabled" },
     "cub01Flip": { "type": "boolean", "default": true, "label": "CUB 01 Flip", "description": "CUB-01 Flip" },
+    "cub01HackInt": { "type": "boolean", "default": false, "label": "CUB 01 IHack", "description": "CUB-01 Hack Int" },
+    "cub01HackExt": { "type": "boolean", "default": false, "label": "CUB 01 EHack", "description": "CUB-01 Hack Ext" },
     "cub01": { "type": "string", "default": "10.0.1.101", "label": "CUB 01 IP", "description": "CUB-01 IP address" },
     "cub02On": { "type": "boolean", "default": true, "label": "CUB 02", "description": "CUB-02 Enabled" },
     "cub02Flip": { "type": "boolean", "default": true, "label": "CUB 02 Flip", "description": "CUB-02 Flip" },
+    "cub02HackInt": { "type": "boolean", "default": false, "label": "CUB 02 IHack", "description": "CUB-02 Hack Int" },
+    "cub02HackExt": { "type": "boolean", "default": false, "label": "CUB 02 EHack", "description": "CUB-02 Hack Ext" },
     "cub02": { "type": "string", "default": "10.0.1.102", "label": "CUB 02 IP", "description": "CUB-02 IP address" },
     "cub03On": { "type": "boolean", "default": true, "label": "CUB 03", "description": "CUB-03 Enabled" },
     "cub03Flip": { "type": "boolean", "default": true, "label": "CUB 03 Flip", "description": "CUB-03 Flip" },
+    "cub03HackInt": { "type": "boolean", "default": false, "label": "CUB 03 IHack", "description": "CUB-03 Hack Int" },
+    "cub03HackExt": { "type": "boolean", "default": false, "label": "CUB 03 EHack", "description": "CUB-03 Hack Ext" },
     "cub03": { "type": "string", "default": "10.0.1.103", "label": "CUB 03 IP", "description": "CUB-03 IP address" },
     "cub04On": { "type": "boolean", "default": true, "label": "CUB 04", "description": "CUB-04 Enabled" },
     "cub04Flip": { "type": "boolean", "default": true, "label": "CUB 04 Flip", "description": "CUB-04 Flip" },
+    "cub04HackInt": { "type": "boolean", "default": false, "label": "CUB 04 IHack", "description": "CUB-04 Hack Int" },
+    "cub04HackExt": { "type": "boolean", "default": false, "label": "CUB 04 EHack", "description": "CUB-04 Hack Ext" },
     "cub04": { "type": "string", "default": "10.0.1.104", "label": "CUB 04 IP", "description": "CUB-04 IP address" },
     "cub05On": { "type": "boolean", "default": true, "label": "CUB 05", "description": "CUB-05 Enabled" },
     "cub05Flip": { "type": "boolean", "default": true, "label": "CUB 05 Flip", "description": "CUB-05 Flip" },
+    "cub05HackInt": { "type": "boolean", "default": false, "label": "CUB 05 IHack", "description": "CUB-05 Hack Int" },
+    "cub05HackExt": { "type": "boolean", "default": false, "label": "CUB 05 EHack", "description": "CUB-05 Hack Ext" },
     "cub05": { "type": "string", "default": "10.0.1.105", "label": "CUB 05 IP", "description": "CUB-05 IP address" },
     "cub06On": { "type": "boolean", "default": true, "label": "CUB 06", "description": "CUB-06 Enabled" },
     "cub06Flip": { "type": "boolean", "default": true, "label": "CUB 06 Flip", "description": "CUB-06 Flip" },
+    "cub06HackInt": { "type": "boolean", "default": false, "label": "CUB 06 IHack", "description": "CUB-06 Hack Int" },
+    "cub06HackExt": { "type": "boolean", "default": false, "label": "CUB 06 EHack", "description": "CUB-06 Hack Ext" },
     "cub06": { "type": "string", "default": "10.0.1.106", "label": "CUB 06 IP", "description": "CUB-06 IP address" },
     "cub07On": { "type": "boolean", "default": true, "label": "CUB 07", "description": "CUB-07 Enabled" },
     "cub07Flip": { "type": "boolean", "default": true, "label": "CUB 07 Flip", "description": "CUB-07 Flip" },
+    "cub07HackInt": { "type": "boolean", "default": false, "label": "CUB 07 IHack", "description": "CUB-07 Hack Int" },
+    "cub07HackExt": { "type": "boolean", "default": false, "label": "CUB 07 EHack", "description": "CUB-07 Hack Ext" },
     "cub07": { "type": "string", "default": "10.0.1.107", "label": "CUB 07 IP", "description": "CUB-07 IP address" },
     "cub08On": { "type": "boolean", "default": true, "label": "CUB 08", "description": "CUB-08 Enabled" },
     "cub08Flip": { "type": "boolean", "default": true, "label": "CUB 08 Flip", "description": "CUB-08 Flip" },
+    "cub08HackInt": { "type": "boolean", "default": false, "label": "CUB 08 IHack", "description": "CUB-08 Hack Int" },
+    "cub08HackExt": { "type": "boolean", "default": false, "label": "CUB 08 EHack", "description": "CUB-08 Hack Ext" },
     "cub08": { "type": "string", "default": "10.0.1.108", "label": "CUB 08 IP", "description": "CUB-08 IP address" },
     "cub09On": { "type": "boolean", "default": true, "label": "CUB 09", "description": "CUB-09 Enabled" },
     "cub09Flip": { "type": "boolean", "default": true, "label": "CUB 09 Flip", "description": "CUB-09 Flip" },
+    "cub09HackInt": { "type": "boolean", "default": false, "label": "CUB 09 IHack", "description": "CUB-09 Hack Int" },
+    "cub09HackExt": { "type": "boolean", "default": false, "label": "CUB 09 EHack", "description": "CUB-09 Hack Ext" },
     "cub09": { "type": "string", "default": "10.0.1.109", "label": "CUB 09 IP", "description": "CUB-09 IP address" },
     "cub10On": { "type": "boolean", "default": true, "label": "CUB 10", "description": "CUB-10 Enabled" },
     "cub10Flip": { "type": "boolean", "default": true, "label": "CUB 10 Flip", "description": "CUB-10 Flip" },
+    "cub10HackInt": { "type": "boolean", "default": false, "label": "CUB 10 IHack", "description": "CUB-10 Hack Int" },
+    "cub10HackExt": { "type": "boolean", "default": false, "label": "CUB 10 EHack", "description": "CUB-10 Hack Ext" },
     "cub10": { "type": "string", "default": "10.0.1.110", "label": "CUB 10 IP", "description": "CUB-10 IP address" },
     "cub11On": { "type": "boolean", "default": true, "label": "CUB 11", "description": "CUB-11 Enabled" },
     "cub11Flip": { "type": "boolean", "default": true, "label": "CUB 11 Flip", "description": "CUB-11 Flip" },
+    "cub11HackInt": { "type": "boolean", "default": false, "label": "CUB 11 IHack", "description": "CUB-11 Hack Int" },
+    "cub11HackExt": { "type": "boolean", "default": false, "label": "CUB 11 EHack", "description": "CUB-11 Hack Ext" },
     "cub11": { "type": "string", "default": "10.0.1.111", "label": "CUB 11 IP", "description": "CUB-11 IP address" },
     "cub12On": { "type": "boolean", "default": true, "label": "CUB 12", "description": "CUB-12 Enabled" },
     "cub12Flip": { "type": "boolean", "default": true, "label": "CUB 12 Flip", "description": "CUB-12 Flip" },
+    "cub12HackInt": { "type": "boolean", "default": false, "label": "CUB 12 IHack", "description": "CUB-12 Hack Int" },
+    "cub12HackExt": { "type": "boolean", "default": false, "label": "CUB 12 EHack", "description": "CUB-12 Hack Ext" },
     "cub12": { "type": "string", "default": "10.0.1.112", "label": "CUB 12 IP", "description": "CUB-12 IP address" },
     "cub13On": { "type": "boolean", "default": true, "label": "CUB 13", "description": "CUB-13 Enabled" },
     "cub13Flip": { "type": "boolean", "default": true, "label": "CUB 13 Flip", "description": "CUB-13 Flip" },
+    "cub13HackInt": { "type": "boolean", "default": false, "label": "CUB 13 IHack", "description": "CUB-13 Hack Int" },
+    "cub13HackExt": { "type": "boolean", "default": false, "label": "CUB 13 EHack", "description": "CUB-13 Hack Ext" },
     "cub13": { "type": "string", "default": "10.0.1.113", "label": "CUB 13 IP", "description": "CUB-13 IP address" },
     "cub14On": { "type": "boolean", "default": true, "label": "CUB 14", "description": "CUB-14 Enabled" },
     "cub14Flip": { "type": "boolean", "default": true, "label": "CUB 14 Flip", "description": "CUB-14 Flip" },
+    "cub14HackInt": { "type": "boolean", "default": false, "label": "CUB 14 IHack", "description": "CUB-14 Hack Int" },
+    "cub14HackExt": { "type": "boolean", "default": false, "label": "CUB 14 EHack", "description": "CUB-14 Hack Ext" },
     "cub14": { "type": "string", "default": "10.0.1.114", "label": "CUB 14 IP", "description": "CUB-14 IP address" },
     "cub15On": { "type": "boolean", "default": true, "label": "CUB 15", "description": "CUB-15 Enabled" },
     "cub15Flip": { "type": "boolean", "default": true, "label": "CUB 15 Flip", "description": "CUB-15 Flip" },
+    "cub15HackInt": { "type": "boolean", "default": false, "label": "CUB 15 IHack", "description": "CUB-15 Hack Int" },
+    "cub15HackExt": { "type": "boolean", "default": false, "label": "CUB 15 EHack", "description": "CUB-15 Hack Ext" },
     "cub15": { "type": "string", "default": "10.0.1.115", "label": "CUB 15 IP", "description": "CUB-15 IP address" },
     "cub16On": { "type": "boolean", "default": true, "label": "CUB 16", "description": "CUB-16 Enabled" },
     "cub16Flip": { "type": "boolean", "default": true, "label": "CUB 16 Flip", "description": "CUB-16 Flip" },
+    "cub16HackInt": { "type": "boolean", "default": false, "label": "CUB 16 IHack", "description": "CUB-16 Hack Int" },
+    "cub16HackExt": { "type": "boolean", "default": false, "label": "CUB 16 EHack", "description": "CUB-16 Hack Ext" },
     "cub16": { "type": "string", "default": "10.0.1.116", "label": "CUB 16 IP", "description": "CUB-16 IP address" },
     "cub17On": { "type": "boolean", "default": true, "label": "CUB 17", "description": "CUB-17 Enabled" },
     "cub17Flip": { "type": "boolean", "default": true, "label": "CUB 17 Flip", "description": "CUB-17 Flip" },
+    "cub17HackInt": { "type": "boolean", "default": false, "label": "CUB 17 IHack", "description": "CUB-17 Hack Int" },
+    "cub17HackExt": { "type": "boolean", "default": false, "label": "CUB 17 EHack", "description": "CUB-17 Hack Ext" },
     "cub17": { "type": "string", "default": "10.0.1.117", "label": "CUB 17 IP", "description": "CUB-17 IP address" },
     "cub18On": { "type": "boolean", "default": true, "label": "CUB 18", "description": "CUB-18 Enabled" },
     "cub18Flip": { "type": "boolean", "default": true, "label": "CUB 18 Flip", "description": "CUB-18 Flip" },
+    "cub18HackInt": { "type": "boolean", "default": false, "label": "CUB 18 IHack", "description": "CUB-18 Hack Int" },
+    "cub18HackExt": { "type": "boolean", "default": false, "label": "CUB 18 EHack", "description": "CUB-18 Hack Ext" },
     "cub18": { "type": "string", "default": "10.0.1.118", "label": "CUB 18 IP", "description": "CUB-18 IP address" },
     "cub19On": { "type": "boolean", "default": true, "label": "CUB 19", "description": "CUB-19 Enabled" },
     "cub19Flip": { "type": "boolean", "default": true, "label": "CUB 19 Flip", "description": "CUB-19 Flip" },
+    "cub19HackInt": { "type": "boolean", "default": false, "label": "CUB 19 IHack", "description": "CUB-19 Hack Int" },
+    "cub19HackExt": { "type": "boolean", "default": false, "label": "CUB 19 EHack", "description": "CUB-19 Hack Ext" },
     "cub19": { "type": "string", "default": "10.0.1.119", "label": "CUB 19 IP", "description": "CUB-19 IP address" },
     "cub20On": { "type": "boolean", "default": true, "label": "CUB 20", "description": "CUB-20 Enabled" },
     "cub20Flip": { "type": "boolean", "default": true, "label": "CUB 20 Flip", "description": "CUB-20 Flip" },
+    "cub20HackInt": { "type": "boolean", "default": false, "label": "CUB 20 IHack", "description": "CUB-20 Hack Int" },
+    "cub20HackExt": { "type": "boolean", "default": false, "label": "CUB 20 EHack", "description": "CUB-20 Hack Ext" },
     "cub20": { "type": "string", "default": "10.0.1.120", "label": "CUB 20 IP", "description": "CUB-20 IP address" },
     "cyl01On": { "type": "boolean", "default": true, "label": "CYL 01", "description": "CYL-01 Enabled" },
     "cyl01Flip": { "type": "boolean", "default": true, "label": "CYL 01 Flip", "description": "CYL-01 Flip" },
+    "cyl01B2F": { "type": "boolean", "default": false, "label": "CYL 01 B2F", "description": "CYL-01 Back to Front" },
     "cyl01": { "type": "string", "default": "10.0.1.121", "label": "CYL 01 IP", "description": "CYL-01 IP address" },
     "cyl02On": { "type": "boolean", "default": true, "label": "CYL 02", "description": "CYL-02 Enabled" },
     "cyl02Flip": { "type": "boolean", "default": true, "label": "CYL 02 Flip", "description": "CYL-02 Flip" },
+    "cyl02B2F": { "type": "boolean", "default": false, "label": "CYL 02 B2F", "description": "CYL-02 Back to Front" },
     "cyl02": { "type": "string", "default": "10.0.1.122", "label": "CYL 02 IP", "description": "CYL-02 IP address" },
     "cyl03On": { "type": "boolean", "default": true, "label": "CYL 03", "description": "CYL-03 Enabled" },
     "cyl03Flip": { "type": "boolean", "default": true, "label": "CYL 03 Flip", "description": "CYL-03 Flip" },
+    "cyl03B2F": { "type": "boolean", "default": false, "label": "CYL 03 B2F", "description": "CYL-03 Back to Front" },
     "cyl03": { "type": "string", "default": "10.0.1.123", "label": "CYL 03 IP", "description": "CYL-03 IP address" },
     "cyl04On": { "type": "boolean", "default": true, "label": "CYL 04", "description": "CYL-04 Enabled" },
     "cyl04Flip": { "type": "boolean", "default": true, "label": "CYL 04 Flip", "description": "CYL-04 Flip" },
+    "cyl04B2F": { "type": "boolean", "default": false, "label": "CYL 04 B2F", "description": "CYL-04 Back to Front" },
     "cyl04": { "type": "string", "default": "10.0.1.124", "label": "CYL 04 IP", "description": "CYL-04 IP address" },
     "cyl05On": { "type": "boolean", "default": true, "label": "CYL 05", "description": "CYL-05 Enabled" },
     "cyl05Flip": { "type": "boolean", "default": true, "label": "CYL 05 Flip", "description": "CYL-05 Flip" },
+    "cyl05B2F": { "type": "boolean", "default": false, "label": "CYL 05 B2F", "description": "CYL-05 Back to Front" },
     "cyl05": { "type": "string", "default": "10.0.1.125", "label": "CYL 05 IP", "description": "CYL-05 IP address" },
     "cyl06On": { "type": "boolean", "default": true, "label": "CYL 06", "description": "CYL-06 Enabled" },
     "cyl06Flip": { "type": "boolean", "default": true, "label": "CYL 06 Flip", "description": "CYL-06 Flip" },
+    "cyl06B2F": { "type": "boolean", "default": false, "label": "CYL 06 B2F", "description": "CYL-06 Back to Front" },
     "cyl06": { "type": "string", "default": "10.0.1.126", "label": "CYL 06 IP", "description": "CYL-06 IP address" },
     "cyl07On": { "type": "boolean", "default": true, "label": "CYL 07", "description": "CYL-07 Enabled" },
     "cyl07Flip": { "type": "boolean", "default": true, "label": "CYL 07 Flip", "description": "CYL-07 Flip" },
+    "cyl07B2F": { "type": "boolean", "default": false, "label": "CYL 07 B2F", "description": "CYL-07 Back to Front" },
     "cyl07": { "type": "string", "default": "10.0.1.127", "label": "CYL 07 IP", "description": "CYL-07 IP address" },
     "cyl08On": { "type": "boolean", "default": true, "label": "CYL 08", "description": "CYL-08 Enabled" },
     "cyl08Flip": { "type": "boolean", "default": true, "label": "CYL 08 Flip", "description": "CYL-08 Flip" },
+    "cyl08B2F": { "type": "boolean", "default": false, "label": "CYL 08 B2F", "description": "CYL-08 Back to Front" },
     "cyl08": { "type": "string", "default": "10.0.1.128", "label": "CYL 08 IP", "description": "CYL-08 IP address" },
     "cyl09On": { "type": "boolean", "default": true, "label": "CYL 09", "description": "CYL-09 Enabled" },
     "cyl09Flip": { "type": "boolean", "default": true, "label": "CYL 09 Flip", "description": "CYL-09 Flip" },
+    "cyl09B2F": { "type": "boolean", "default": false, "label": "CYL 09 B2F", "description": "CYL-09 Back to Front" },
     "cyl09": { "type": "string", "default": "10.0.1.129", "label": "CYL 09 IP", "description": "CYL-09 IP address" },
     "cyl10On": { "type": "boolean", "default": true, "label": "CYL 10", "description": "CYL-10 Enabled" },
     "cyl10Flip": { "type": "boolean", "default": true, "label": "CYL 10 Flip", "description": "CYL-10 Flip" },
+    "cyl10B2F": { "type": "boolean", "default": false, "label": "CYL 10 B2F", "description": "CYL-10 Back to Front" },
     "cyl10": { "type": "string", "default": "10.0.1.130", "label": "CYL 10 IP", "description": "CYL-10 IP address" },
     "cyl11On": { "type": "boolean", "default": true, "label": "CYL 11", "description": "CYL-11 Enabled" },
     "cyl11Flip": { "type": "boolean", "default": true, "label": "CYL 11 Flip", "description": "CYL-11 Flip" },
+    "cyl11B2F": { "type": "boolean", "default": false, "label": "CYL 11 B2F", "description": "CYL-11 Back to Front" },
     "cyl11": { "type": "string", "default": "10.0.1.131", "label": "CYL 11 IP", "description": "CYL-11 IP address" },
     "cyl12On": { "type": "boolean", "default": true, "label": "CYL 12", "description": "CYL-12 Enabled" },
     "cyl12Flip": { "type": "boolean", "default": true, "label": "CYL 12 Flip", "description": "CYL-12 Flip" },
+    "cyl12B2F": { "type": "boolean", "default": false, "label": "CYL 12 B2F", "description": "CYL-12 Back to Front" },
     "cyl12": { "type": "string", "default": "10.0.1.132", "label": "CYL 12 IP", "description": "CYL-12 IP address" }
   },
 
@@ -351,7 +401,7 @@
   
   "outputs": [
     {
-      "enabled": "$cub01On & !$cub01Flip",
+      "enabled": "$cub01On & !$cub01Flip & !$cub01HackExt",
       "protocol": "artnet",
       "host": "$cub01",
       "universe": 0,
@@ -369,7 +419,7 @@
       ]
     },
     {
-      "enabled": "$cub01On & !$cub01Flip",
+      "enabled": "$cub01On & !$cub01Flip & !$cub01HackInt",
       "protocol": "artnet",
       "host": "$cub01",
       "universe": 3,
@@ -387,7 +437,7 @@
       ]
     },
     {
-      "enabled": "$cub02On & !$cub02Flip",
+      "enabled": "$cub02On & !$cub02Flip & !$cub02HackExt",
       "protocol": "artnet",
       "host": "$cub02",
       "universe": 6,
@@ -405,7 +455,7 @@
       ]
     },
     {
-      "enabled": "$cub02On & !$cub02Flip",
+      "enabled": "$cub02On & !$cub02Flip & !$cub02HackInt",
       "protocol": "artnet",
       "host": "$cub02",
       "universe": 9,
@@ -423,7 +473,7 @@
       ]
     },
     {
-      "enabled": "$cub03On & !$cub03Flip",
+      "enabled": "$cub03On & !$cub03Flip & !$cub03HackExt",
       "protocol": "artnet",
       "host": "$cub03",
       "universe": 12,
@@ -441,7 +491,7 @@
       ]
     },
     {
-      "enabled": "$cub03On & !$cub03Flip",
+      "enabled": "$cub03On & !$cub03Flip & !$cub03HackInt",
       "protocol": "artnet",
       "host": "$cub03",
       "universe": 15,
@@ -459,7 +509,7 @@
       ]
     },
     {
-      "enabled": "$cub04On & !$cub04Flip",
+      "enabled": "$cub04On & !$cub04Flip & !$cub04HackExt",
       "protocol": "artnet",
       "host": "$cub04",
       "universe": 18,
@@ -477,7 +527,7 @@
       ]
     },
     {
-      "enabled": "$cub04On & !$cub04Flip",
+      "enabled": "$cub04On & !$cub04Flip & !$cub04HackInt",
       "protocol": "artnet",
       "host": "$cub04",
       "universe": 21,
@@ -495,7 +545,7 @@
       ]
     },
     {
-      "enabled": "$cub05On & !$cub05Flip",
+      "enabled": "$cub05On & !$cub05Flip & !$cub05HackExt",
       "protocol": "artnet",
       "host": "$cub05",
       "universe": 24,
@@ -513,7 +563,7 @@
       ]
     },
     {
-      "enabled": "$cub05On & !$cub05Flip",
+      "enabled": "$cub05On & !$cub05Flip & !$cub05HackInt",
       "protocol": "artnet",
       "host": "$cub05",
       "universe": 27,
@@ -531,7 +581,7 @@
       ]
     },
     {
-      "enabled": "$cub06On & !$cub06Flip",
+      "enabled": "$cub06On & !$cub06Flip & !$cub06HackExt",
       "protocol": "artnet",
       "host": "$cub06",
       "universe": 30,
@@ -549,7 +599,7 @@
       ]
     },
     {
-      "enabled": "$cub06On & !$cub06Flip",
+      "enabled": "$cub06On & !$cub06Flip & !$cub06HackInt",
       "protocol": "artnet",
       "host": "$cub06",
       "universe": 33,
@@ -567,7 +617,7 @@
       ]
     },
     {
-      "enabled": "$cub07On & !$cub07Flip",
+      "enabled": "$cub07On & !$cub07Flip & !$cub07HackExt",
       "protocol": "artnet",
       "host": "$cub07",
       "universe": 36,
@@ -585,7 +635,7 @@
       ]
     },
     {
-      "enabled": "$cub07On & !$cub07Flip",
+      "enabled": "$cub07On & !$cub07Flip & !$cub07HackInt",
       "protocol": "artnet",
       "host": "$cub07",
       "universe": 39,
@@ -603,7 +653,7 @@
       ]
     },
     {
-      "enabled": "$cub08On & !$cub08Flip",
+      "enabled": "$cub08On & !$cub08Flip & !$cub08HackExt",
       "protocol": "artnet",
       "host": "$cub08",
       "universe": 42,
@@ -621,7 +671,7 @@
       ]
     },
     {
-      "enabled": "$cub08On & !$cub08Flip",
+      "enabled": "$cub08On & !$cub08Flip & !$cub08HackInt",
       "protocol": "artnet",
       "host": "$cub08",
       "universe": 45,
@@ -639,7 +689,7 @@
       ]
     },
     {
-      "enabled": "$cub09On & !$cub09Flip",
+      "enabled": "$cub09On & !$cub09Flip & !$cub09HackExt",
       "protocol": "artnet",
       "host": "$cub09",
       "universe": 48,
@@ -657,7 +707,7 @@
       ]
     },
     {
-      "enabled": "$cub09On & !$cub09Flip",
+      "enabled": "$cub09On & !$cub09Flip & !$cub09HackInt",
       "protocol": "artnet",
       "host": "$cub09",
       "universe": 51,
@@ -675,7 +725,7 @@
       ]
     },
     {
-      "enabled": "$cub10On & !$cub10Flip",
+      "enabled": "$cub10On & !$cub10Flip & !$cub10HackExt",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 54,
@@ -693,7 +743,7 @@
       ]
     },
     {
-      "enabled": "$cub10On & !$cub10Flip & !$hackCub10",
+      "enabled": "$cub10On & !$cub10Flip & !$cub10HackInt",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 57,
@@ -711,7 +761,7 @@
       ]
     },
     {
-      "enabled": "$cub11On & !$cub11Flip",
+      "enabled": "$cub11On & !$cub11Flip & !$cub11HackExt",
       "protocol": "artnet",
       "host": "$cub11",
       "universe": 60,
@@ -729,7 +779,7 @@
       ]
     },
     {
-      "enabled": "$cub11On & !$cub11Flip",
+      "enabled": "$cub11On & !$cub11Flip & !$cub11HackInt",
       "protocol": "artnet",
       "host": "$cub11",
       "universe": 63,
@@ -747,7 +797,7 @@
       ]
     },
     {
-      "enabled": "$cub12On & !$cub12Flip",
+      "enabled": "$cub12On & !$cub12Flip & !$cub12HackExt",
       "protocol": "artnet",
       "host": "$cub12",
       "universe": 66,
@@ -765,7 +815,7 @@
       ]
     },
     {
-      "enabled": "$cub12On & !$cub12Flip",
+      "enabled": "$cub12On & !$cub12Flip & !$cub12HackInt",
       "protocol": "artnet",
       "host": "$cub12",
       "universe": 69,
@@ -783,7 +833,7 @@
       ]
     },
     {
-      "enabled": "$cub13On & !$cub13Flip",
+      "enabled": "$cub13On & !$cub13Flip & !$cub13HackExt",
       "protocol": "artnet",
       "host": "$cub13",
       "universe": 72,
@@ -801,7 +851,7 @@
       ]
     },
     {
-      "enabled": "$cub13On & !$cub13Flip",
+      "enabled": "$cub13On & !$cub13Flip & !$cub13HackInt",
       "protocol": "artnet",
       "host": "$cub13",
       "universe": 75,
@@ -819,7 +869,7 @@
       ]
     },
     {
-      "enabled": "$cub14On & !$cub14Flip",
+      "enabled": "$cub14On & !$cub14Flip & !$cub14HackExt",
       "protocol": "artnet",
       "host": "$cub14",
       "universe": 78,
@@ -837,7 +887,7 @@
       ]
     },
     {
-      "enabled": "$cub14On & !$cub14Flip",
+      "enabled": "$cub14On & !$cub14Flip & !$cub14HackInt",
       "protocol": "artnet",
       "host": "$cub14",
       "universe": 81,
@@ -855,7 +905,7 @@
       ]
     },
     {
-      "enabled": "$cub15On & !$cub15Flip",
+      "enabled": "$cub15On & !$cub15Flip & !$cub15HackExt",
       "protocol": "artnet",
       "host": "$cub15",
       "universe": 84,
@@ -873,7 +923,7 @@
       ]
     },
     {
-      "enabled": "$cub15On & !$cub15Flip",
+      "enabled": "$cub15On & !$cub15Flip & !$cub15HackInt",
       "protocol": "artnet",
       "host": "$cub15",
       "universe": 87,
@@ -891,7 +941,7 @@
       ]
     },
     {
-      "enabled": "$cub16On & !$cub16Flip",
+      "enabled": "$cub16On & !$cub16Flip & !$cub16HackExt",
       "protocol": "artnet",
       "host": "$cub16",
       "universe": 90,
@@ -909,7 +959,7 @@
       ]
     },
     {
-      "enabled": "$cub16On & !$cub16Flip",
+      "enabled": "$cub16On & !$cub16Flip & !$cub16HackInt",
       "protocol": "artnet",
       "host": "$cub16",
       "universe": 93,
@@ -927,7 +977,7 @@
       ]
     },
     {
-      "enabled": "$cub17On & !$cub17Flip",
+      "enabled": "$cub17On & !$cub17Flip & !$cub17HackExt",
       "protocol": "artnet",
       "host": "$cub17",
       "universe": 96,
@@ -945,7 +995,7 @@
       ]
     },
     {
-      "enabled": "$cub17On & !$cub17Flip",
+      "enabled": "$cub17On & !$cub17Flip & !$cub17HackInt",
       "protocol": "artnet",
       "host": "$cub17",
       "universe": 99,
@@ -963,7 +1013,7 @@
       ]
     },
     {
-      "enabled": "$cub18On & !$cub18Flip",
+      "enabled": "$cub18On & !$cub18Flip & !$cub18HackExt",
       "protocol": "artnet",
       "host": "$cub18",
       "universe": 102,
@@ -981,7 +1031,7 @@
       ]
     },
     {
-      "enabled": "$cub18On & !$cub18Flip",
+      "enabled": "$cub18On & !$cub18Flip & !$cub18HackInt",
       "protocol": "artnet",
       "host": "$cub18",
       "universe": 105,
@@ -999,7 +1049,7 @@
       ]
     },
     {
-      "enabled": "$cub19On & !$cub19Flip",
+      "enabled": "$cub19On & !$cub19Flip & !$cub19HackExt",
       "protocol": "artnet",
       "host": "$cub19",
       "universe": 108,
@@ -1017,7 +1067,7 @@
       ]
     },
     {
-      "enabled": "$cub19On & !$cub19Flip",
+      "enabled": "$cub19On & !$cub19Flip & !$cub19HackInt",
       "protocol": "artnet",
       "host": "$cub19",
       "universe": 111,
@@ -1035,7 +1085,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & !$cub20Flip & !$hackCub20",
+      "enabled": "$cub20On & !$cub20Flip & !$cub20HackExt",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 114,
@@ -1053,7 +1103,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & !$cub20Flip & !$hackCub20",
+      "enabled": "$cub20On & !$cub20Flip & !$cub20HackInt",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 117,
@@ -1292,24 +1342,6 @@
       "host": "$cyl08",
       "universe": 162,
       "segments": [
-        { "start": 20580, "num": 43 },
-        { "start": 20623, "num": 43, "reverse": true },
-        { "start": 20666, "num": 43 },
-        { "start": 20709, "num": 43, "reverse": true },
-        { "start": 20752, "num": 43 },
-        { "start": 20795, "num": 43, "reverse": true },
-        { "start": 20838, "num": 43 },
-        { "start": 20881, "num": 43, "reverse": true },
-        { "start": 20924, "num": 43 },
-        { "start": 20967, "num": 43, "reverse": true }
-      ]
-    },
-    {
-      "enabled": "$cyl08On & !$cyl08Flip",
-      "protocol": "artnet",
-      "host": "$cyl08",
-      "universe": 165,
-      "segments": [
         { "start": 25740, "num": 43 },
         { "start": 25783, "num": 43, "reverse": true },
         { "start": 25826, "num": 43 },
@@ -1320,6 +1352,24 @@
         { "start": 26041, "num": 43, "reverse": true },
         { "start": 26084, "num": 43 },
         { "start": 26127, "num": 43, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cyl08On & !$cyl08Flip",
+      "protocol": "artnet",
+      "host": "$cyl08",
+      "universe": 165,
+      "segments": [
+        { "start": 20580, "num": 43 },
+        { "start": 20623, "num": 43, "reverse": true },
+        { "start": 20666, "num": 43 },
+        { "start": 20709, "num": 43, "reverse": true },
+        { "start": 20752, "num": 43 },
+        { "start": 20795, "num": 43, "reverse": true },
+        { "start": 20838, "num": 43 },
+        { "start": 20881, "num": 43, "reverse": true },
+        { "start": 20924, "num": 43 },
+        { "start": 20967, "num": 43, "reverse": true }
       ]
     },
     {
@@ -1503,7 +1553,7 @@
       ]
     },
     {
-      "enabled": "$cub01On & $cub01Flip",
+      "enabled": "$cub01On & $cub01Flip & !$cub01HackExt",
       "protocol": "artnet",
       "host": "$cub01",
       "universe": 0,
@@ -1521,7 +1571,25 @@
       ]
     },
     {
-      "enabled": "$cub01On & $cub01Flip",
+      "enabled": "$cub01On & $cub01Flip & $cub01HackExt",
+      "protocol": "artnet",
+      "host": "$cub01",
+      "universe": 0,
+      "segments": [
+        { "start": 406, "num": 44 },
+        { "start": 360, "num": 45, "reverse": true },
+        { "start": 315, "num": 45 },
+        { "start": 270, "num": 45, "reverse": true },
+        { "start": 225, "num": 45 },
+        { "start": 180, "num": 45, "reverse": true },
+        { "start": 135, "num": 45 },
+        { "start": 90, "num": 45, "reverse": true },
+        { "start": 45, "num": 45 },
+        { "start": 0, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub01On & $cub01Flip & !$cub01HackInt",
       "protocol": "artnet",
       "host": "$cub01",
       "universe": 3,
@@ -1539,7 +1607,25 @@
       ]
     },
     {
-      "enabled": "$cub02On & $cub02Flip",
+      "enabled": "$cub01On & $cub01Flip & $cub01HackInt",
+      "protocol": "artnet",
+      "host": "$cub01",
+      "universe": 3,
+      "segments": [
+        { "start": 9406, "num": 44 },
+        { "start": 9360, "num": 45, "reverse": true },
+        { "start": 9315, "num": 45 },
+        { "start": 9270, "num": 45, "reverse": true },
+        { "start": 9225, "num": 45 },
+        { "start": 9180, "num": 45, "reverse": true },
+        { "start": 9135, "num": 45 },
+        { "start": 9090, "num": 45, "reverse": true },
+        { "start": 9045, "num": 45 },
+        { "start": 9000, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub02On & $cub02Flip & !$cub02HackExt",
       "protocol": "artnet",
       "host": "$cub02",
       "universe": 6,
@@ -1557,7 +1643,25 @@
       ]
     },
     {
-      "enabled": "$cub02On & $cub02Flip",
+      "enabled": "$cub02On & $cub02Flip & $cub02HackExt",
+      "protocol": "artnet",
+      "host": "$cub02",
+      "universe": 6,
+      "segments": [
+        { "start": 856, "num": 44 },
+        { "start": 810, "num": 45, "reverse": true },
+        { "start": 765, "num": 45 },
+        { "start": 720, "num": 45, "reverse": true },
+        { "start": 675, "num": 45 },
+        { "start": 630, "num": 45, "reverse": true },
+        { "start": 585, "num": 45 },
+        { "start": 540, "num": 45, "reverse": true },
+        { "start": 495, "num": 45 },
+        { "start": 450, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub02On & $cub02Flip & !$cub02HackInt",
       "protocol": "artnet",
       "host": "$cub02",
       "universe": 9,
@@ -1575,7 +1679,25 @@
       ]
     },
     {
-      "enabled": "$cub03On & $cub03Flip",
+      "enabled": "$cub02On & $cub02Flip & $cub02HackInt",
+      "protocol": "artnet",
+      "host": "$cub02",
+      "universe": 9,
+      "segments": [
+        { "start": 9856, "num": 44 },
+        { "start": 9810, "num": 45, "reverse": true },
+        { "start": 9765, "num": 45 },
+        { "start": 9720, "num": 45, "reverse": true },
+        { "start": 9675, "num": 45 },
+        { "start": 9630, "num": 45, "reverse": true },
+        { "start": 9585, "num": 45 },
+        { "start": 9540, "num": 45, "reverse": true },
+        { "start": 9495, "num": 45 },
+        { "start": 9450, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub03On & $cub03Flip & !$cub03HackExt",
       "protocol": "artnet",
       "host": "$cub03",
       "universe": 12,
@@ -1593,7 +1715,25 @@
       ]
     },
     {
-      "enabled": "$cub03On & $cub03Flip",
+      "enabled": "$cub03On & $cub03Flip & $cub03HackExt",
+      "protocol": "artnet",
+      "host": "$cub03",
+      "universe": 12,
+      "segments": [
+        { "start": 1306, "num": 33 },
+        { "start": 1260, "num": 34, "reverse": true },
+        { "start": 1215, "num": 34 },
+        { "start": 1170, "num": 34, "reverse": true },
+        { "start": 1125, "num": 34 },
+        { "start": 1080, "num": 34, "reverse": true },
+        { "start": 1035, "num": 34 },
+        { "start": 990, "num": 34, "reverse": true },
+        { "start": 945, "num": 34 },
+        { "start": 900, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub03On & $cub03Flip & !$cub03HackInt",
       "protocol": "artnet",
       "host": "$cub03",
       "universe": 15,
@@ -1611,7 +1751,25 @@
       ]
     },
     {
-      "enabled": "$cub04On & $cub04Flip",
+      "enabled": "$cub03On & $cub03Flip & $cub03HackInt",
+      "protocol": "artnet",
+      "host": "$cub03",
+      "universe": 15,
+      "segments": [
+        { "start": 10306, "num": 33 },
+        { "start": 10260, "num": 34, "reverse": true },
+        { "start": 10215, "num": 34 },
+        { "start": 10170, "num": 34, "reverse": true },
+        { "start": 10125, "num": 34 },
+        { "start": 10080, "num": 34, "reverse": true },
+        { "start": 10035, "num": 34 },
+        { "start": 9990, "num": 34, "reverse": true },
+        { "start": 9945, "num": 34 },
+        { "start": 9900, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub04On & $cub04Flip & !$cub04HackExt",
       "protocol": "artnet",
       "host": "$cub04",
       "universe": 18,
@@ -1629,7 +1787,25 @@
       ]
     },
     {
-      "enabled": "$cub04On & $cub04Flip",
+      "enabled": "$cub04On & $cub04Flip & $cub04HackExt",
+      "protocol": "artnet",
+      "host": "$cub04",
+      "universe": 18,
+      "segments": [
+        { "start": 1756, "num": 44 },
+        { "start": 1710, "num": 45, "reverse": true },
+        { "start": 1665, "num": 45 },
+        { "start": 1620, "num": 45, "reverse": true },
+        { "start": 1575, "num": 45 },
+        { "start": 1530, "num": 45, "reverse": true },
+        { "start": 1485, "num": 45 },
+        { "start": 1440, "num": 45, "reverse": true },
+        { "start": 1395, "num": 45 },
+        { "start": 1350, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub04On & $cub04Flip & !$cub04HackInt",
       "protocol": "artnet",
       "host": "$cub04",
       "universe": 21,
@@ -1647,7 +1823,25 @@
       ]
     },
     {
-      "enabled": "$cub05On & $cub05Flip",
+      "enabled": "$cub04On & $cub04Flip & $cub04HackInt",
+      "protocol": "artnet",
+      "host": "$cub04",
+      "universe": 21,
+      "segments": [
+        { "start": 10756, "num": 44 },
+        { "start": 10710, "num": 45, "reverse": true },
+        { "start": 10665, "num": 45 },
+        { "start": 10620, "num": 45, "reverse": true },
+        { "start": 10575, "num": 45 },
+        { "start": 10530, "num": 45, "reverse": true },
+        { "start": 10485, "num": 45 },
+        { "start": 10440, "num": 45, "reverse": true },
+        { "start": 10395, "num": 45 },
+        { "start": 10350, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub05On & $cub05Flip & !$cub05HackExt",
       "protocol": "artnet",
       "host": "$cub05",
       "universe": 24,
@@ -1665,7 +1859,25 @@
       ]
     },
     {
-      "enabled": "$cub05On & $cub05Flip",
+      "enabled": "$cub05On & $cub05Flip & $cub05HackExt",
+      "protocol": "artnet",
+      "host": "$cub05",
+      "universe": 24,
+      "segments": [
+        { "start": 2206, "num": 44 },
+        { "start": 2160, "num": 45, "reverse": true },
+        { "start": 2115, "num": 45 },
+        { "start": 2070, "num": 45, "reverse": true },
+        { "start": 2025, "num": 45 },
+        { "start": 1980, "num": 45, "reverse": true },
+        { "start": 1935, "num": 45 },
+        { "start": 1890, "num": 45, "reverse": true },
+        { "start": 1845, "num": 45 },
+        { "start": 1800, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub05On & $cub05Flip & !$cub05HackInt",
       "protocol": "artnet",
       "host": "$cub05",
       "universe": 27,
@@ -1683,7 +1895,25 @@
       ]
     },
     {
-      "enabled": "$cub06On & $cub06Flip",
+      "enabled": "$cub05On & $cub05Flip & $cub05HackInt",
+      "protocol": "artnet",
+      "host": "$cub05",
+      "universe": 27,
+      "segments": [
+        { "start": 11206, "num": 44 },
+        { "start": 11160, "num": 45, "reverse": true },
+        { "start": 11115, "num": 45 },
+        { "start": 11070, "num": 45, "reverse": true },
+        { "start": 11025, "num": 45 },
+        { "start": 10980, "num": 45, "reverse": true },
+        { "start": 10935, "num": 45 },
+        { "start": 10890, "num": 45, "reverse": true },
+        { "start": 10845, "num": 45 },
+        { "start": 10800, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub06On & $cub06Flip & !$cub06HackExt",
       "protocol": "artnet",
       "host": "$cub06",
       "universe": 30,
@@ -1701,7 +1931,25 @@
       ]
     },
     {
-      "enabled": "$cub06On & $cub06Flip",
+      "enabled": "$cub06On & $cub06Flip & $cub06HackExt",
+      "protocol": "artnet",
+      "host": "$cub06",
+      "universe": 30,
+      "segments": [
+        { "start": 2656, "num": 44 },
+        { "start": 2610, "num": 45, "reverse": true },
+        { "start": 2565, "num": 45 },
+        { "start": 2520, "num": 45, "reverse": true },
+        { "start": 2475, "num": 45 },
+        { "start": 2430, "num": 45, "reverse": true },
+        { "start": 2385, "num": 45 },
+        { "start": 2340, "num": 45, "reverse": true },
+        { "start": 2295, "num": 45 },
+        { "start": 2250, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub06On & $cub06Flip & !$cub06HackInt",
       "protocol": "artnet",
       "host": "$cub06",
       "universe": 33,
@@ -1719,7 +1967,25 @@
       ]
     },
     {
-      "enabled": "$cub07On & $cub07Flip",
+      "enabled": "$cub06On & $cub06Flip & $cub06HackInt",
+      "protocol": "artnet",
+      "host": "$cub06",
+      "universe": 33,
+      "segments": [
+        { "start": 11656, "num": 44 },
+        { "start": 11610, "num": 45, "reverse": true },
+        { "start": 11565, "num": 45 },
+        { "start": 11520, "num": 45, "reverse": true },
+        { "start": 11475, "num": 45 },
+        { "start": 11430, "num": 45, "reverse": true },
+        { "start": 11385, "num": 45 },
+        { "start": 11340, "num": 45, "reverse": true },
+        { "start": 11295, "num": 45 },
+        { "start": 11250, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub07On & $cub07Flip & !$cub07HackExt",
       "protocol": "artnet",
       "host": "$cub07",
       "universe": 36,
@@ -1737,7 +2003,25 @@
       ]
     },
     {
-      "enabled": "$cub07On & $cub07Flip",
+      "enabled": "$cub07On & $cub07Flip & $cub07HackExt",
+      "protocol": "artnet",
+      "host": "$cub07",
+      "universe": 36,
+      "segments": [
+        { "start": 3106, "num": 44 },
+        { "start": 3060, "num": 45, "reverse": true },
+        { "start": 3015, "num": 45 },
+        { "start": 2970, "num": 45, "reverse": true },
+        { "start": 2925, "num": 45 },
+        { "start": 2880, "num": 45, "reverse": true },
+        { "start": 2835, "num": 45 },
+        { "start": 2790, "num": 45, "reverse": true },
+        { "start": 2745, "num": 45 },
+        { "start": 2700, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub07On & $cub07Flip & !$cub07HackInt",
       "protocol": "artnet",
       "host": "$cub07",
       "universe": 39,
@@ -1755,7 +2039,25 @@
       ]
     },
     {
-      "enabled": "$cub08On & $cub08Flip",
+      "enabled": "$cub07On & $cub07Flip & $cub07HackInt",
+      "protocol": "artnet",
+      "host": "$cub07",
+      "universe": 39,
+      "segments": [
+        { "start": 12106, "num": 44 },
+        { "start": 12060, "num": 45, "reverse": true },
+        { "start": 12015, "num": 45 },
+        { "start": 11970, "num": 45, "reverse": true },
+        { "start": 11925, "num": 45 },
+        { "start": 11880, "num": 45, "reverse": true },
+        { "start": 11835, "num": 45 },
+        { "start": 11790, "num": 45, "reverse": true },
+        { "start": 11745, "num": 45 },
+        { "start": 11700, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub08On & $cub08Flip & !$cub08HackExt",
       "protocol": "artnet",
       "host": "$cub08",
       "universe": 42,
@@ -1773,7 +2075,25 @@
       ]
     },
     {
-      "enabled": "$cub08On & $cub08Flip",
+      "enabled": "$cub08On & $cub08Flip & $cub08HackExt",
+      "protocol": "artnet",
+      "host": "$cub08",
+      "universe": 42,
+      "segments": [
+        { "start": 3556, "num": 33 },
+        { "start": 3510, "num": 34, "reverse": true },
+        { "start": 3465, "num": 34 },
+        { "start": 3420, "num": 34, "reverse": true },
+        { "start": 3375, "num": 34 },
+        { "start": 3330, "num": 34, "reverse": true },
+        { "start": 3285, "num": 34 },
+        { "start": 3240, "num": 34, "reverse": true },
+        { "start": 3195, "num": 34 },
+        { "start": 3150, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub08On & $cub08Flip & !$cub08HackInt",
       "protocol": "artnet",
       "host": "$cub08",
       "universe": 45,
@@ -1791,7 +2111,25 @@
       ]
     },
     {
-      "enabled": "$cub09On & $cub09Flip",
+      "enabled": "$cub08On & $cub08Flip & $cub08HackInt",
+      "protocol": "artnet",
+      "host": "$cub08",
+      "universe": 45,
+      "segments": [
+        { "start": 12556, "num": 33 },
+        { "start": 12510, "num": 34, "reverse": true },
+        { "start": 12465, "num": 34 },
+        { "start": 12420, "num": 34, "reverse": true },
+        { "start": 12375, "num": 34 },
+        { "start": 12330, "num": 34, "reverse": true },
+        { "start": 12285, "num": 34 },
+        { "start": 12240, "num": 34, "reverse": true },
+        { "start": 12195, "num": 34 },
+        { "start": 12150, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub09On & $cub09Flip & !$cub09HackExt",
       "protocol": "artnet",
       "host": "$cub09",
       "universe": 48,
@@ -1809,7 +2147,25 @@
       ]
     },
     {
-      "enabled": "$cub09On & $cub09Flip",
+      "enabled": "$cub09On & $cub09Flip & $cub09HackExt",
+      "protocol": "artnet",
+      "host": "$cub09",
+      "universe": 48,
+      "segments": [
+        { "start": 4006, "num": 44 },
+        { "start": 3960, "num": 45, "reverse": true },
+        { "start": 3915, "num": 45 },
+        { "start": 3870, "num": 45, "reverse": true },
+        { "start": 3825, "num": 45 },
+        { "start": 3780, "num": 45, "reverse": true },
+        { "start": 3735, "num": 45 },
+        { "start": 3690, "num": 45, "reverse": true },
+        { "start": 3645, "num": 45 },
+        { "start": 3600, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub09On & $cub09Flip & !$cub09HackInt",
       "protocol": "artnet",
       "host": "$cub09",
       "universe": 51,
@@ -1827,7 +2183,25 @@
       ]
     },
     {
-      "enabled": "$cub10On & $cub10Flip",
+      "enabled": "$cub09On & $cub09Flip & $cub09HackInt",
+      "protocol": "artnet",
+      "host": "$cub09",
+      "universe": 51,
+      "segments": [
+        { "start": 13006, "num": 44 },
+        { "start": 12960, "num": 45, "reverse": true },
+        { "start": 12915, "num": 45 },
+        { "start": 12870, "num": 45, "reverse": true },
+        { "start": 12825, "num": 45 },
+        { "start": 12780, "num": 45, "reverse": true },
+        { "start": 12735, "num": 45 },
+        { "start": 12690, "num": 45, "reverse": true },
+        { "start": 12645, "num": 45 },
+        { "start": 12600, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub10On & $cub10Flip & !$cub10HackExt",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 54,
@@ -1845,7 +2219,25 @@
       ]
     },
     {
-      "enabled": "$cub10On & $cub10Flip & !$hackCub10",
+      "enabled": "$cub10On & $cub10Flip & $cub10HackExt",
+      "protocol": "artnet",
+      "host": "$cub10",
+      "universe": 54,
+      "segments": [
+        { "start": 4456, "num": 44 },
+        { "start": 4410, "num": 45, "reverse": true },
+        { "start": 4365, "num": 45 },
+        { "start": 4320, "num": 45, "reverse": true },
+        { "start": 4275, "num": 45 },
+        { "start": 4230, "num": 45, "reverse": true },
+        { "start": 4185, "num": 45 },
+        { "start": 4140, "num": 45, "reverse": true },
+        { "start": 4095, "num": 45 },
+        { "start": 4050, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub10On & $cub10Flip & !$cub10HackInt",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 57,
@@ -1863,7 +2255,7 @@
       ]
     },
     {
-      "enabled": "$cub10On & $cub10Flip & $hackCub10",
+      "enabled": "$cub10On & $cub10Flip & $cub10HackInt",
       "protocol": "artnet",
       "host": "$cub10",
       "universe": 57,
@@ -1881,7 +2273,7 @@
       ]
     },
     {
-      "enabled": "$cub11On & $cub11Flip",
+      "enabled": "$cub11On & $cub11Flip & !$cub11HackExt",
       "protocol": "artnet",
       "host": "$cub11",
       "universe": 60,
@@ -1899,7 +2291,25 @@
       ]
     },
     {
-      "enabled": "$cub11On & $cub11Flip",
+      "enabled": "$cub11On & $cub11Flip & $cub11HackExt",
+      "protocol": "artnet",
+      "host": "$cub11",
+      "universe": 60,
+      "segments": [
+        { "start": 4906, "num": 44 },
+        { "start": 4860, "num": 45, "reverse": true },
+        { "start": 4815, "num": 45 },
+        { "start": 4770, "num": 45, "reverse": true },
+        { "start": 4725, "num": 45 },
+        { "start": 4680, "num": 45, "reverse": true },
+        { "start": 4635, "num": 45 },
+        { "start": 4590, "num": 45, "reverse": true },
+        { "start": 4545, "num": 45 },
+        { "start": 4500, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub11On & $cub11Flip & !$cub11HackInt",
       "protocol": "artnet",
       "host": "$cub11",
       "universe": 63,
@@ -1917,7 +2327,25 @@
       ]
     },
     {
-      "enabled": "$cub12On & $cub12Flip",
+      "enabled": "$cub11On & $cub11Flip & $cub11HackInt",
+      "protocol": "artnet",
+      "host": "$cub11",
+      "universe": 63,
+      "segments": [
+        { "start": 13906, "num": 44 },
+        { "start": 13860, "num": 45, "reverse": true },
+        { "start": 13815, "num": 45 },
+        { "start": 13770, "num": 45, "reverse": true },
+        { "start": 13725, "num": 45 },
+        { "start": 13680, "num": 45, "reverse": true },
+        { "start": 13635, "num": 45 },
+        { "start": 13590, "num": 45, "reverse": true },
+        { "start": 13545, "num": 45 },
+        { "start": 13500, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub12On & $cub12Flip & !$cub12HackExt",
       "protocol": "artnet",
       "host": "$cub12",
       "universe": 66,
@@ -1935,7 +2363,25 @@
       ]
     },
     {
-      "enabled": "$cub12On & $cub12Flip",
+      "enabled": "$cub12On & $cub12Flip & $cub12HackExt",
+      "protocol": "artnet",
+      "host": "$cub12",
+      "universe": 66,
+      "segments": [
+        { "start": 5356, "num": 44 },
+        { "start": 5310, "num": 45, "reverse": true },
+        { "start": 5265, "num": 45 },
+        { "start": 5220, "num": 45, "reverse": true },
+        { "start": 5175, "num": 45 },
+        { "start": 5130, "num": 45, "reverse": true },
+        { "start": 5085, "num": 45 },
+        { "start": 5040, "num": 45, "reverse": true },
+        { "start": 4995, "num": 45 },
+        { "start": 4950, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub12On & $cub12Flip & !$cub12HackInt",
       "protocol": "artnet",
       "host": "$cub12",
       "universe": 69,
@@ -1953,7 +2399,25 @@
       ]
     },
     {
-      "enabled": "$cub13On & $cub13Flip",
+      "enabled": "$cub12On & $cub12Flip & $cub12HackInt",
+      "protocol": "artnet",
+      "host": "$cub12",
+      "universe": 69,
+      "segments": [
+        { "start": 14356, "num": 44 },
+        { "start": 14310, "num": 45, "reverse": true },
+        { "start": 14265, "num": 45 },
+        { "start": 14220, "num": 45, "reverse": true },
+        { "start": 14175, "num": 45 },
+        { "start": 14130, "num": 45, "reverse": true },
+        { "start": 14085, "num": 45 },
+        { "start": 14040, "num": 45, "reverse": true },
+        { "start": 13995, "num": 45 },
+        { "start": 13950, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub13On & $cub13Flip & !$cub13HackExt",
       "protocol": "artnet",
       "host": "$cub13",
       "universe": 72,
@@ -1971,7 +2435,25 @@
       ]
     },
     {
-      "enabled": "$cub13On & $cub13Flip",
+      "enabled": "$cub13On & $cub13Flip & $cub13HackExt",
+      "protocol": "artnet",
+      "host": "$cub13",
+      "universe": 72,
+      "segments": [
+        { "start": 5806, "num": 33 },
+        { "start": 5760, "num": 34, "reverse": true },
+        { "start": 5715, "num": 34 },
+        { "start": 5670, "num": 34, "reverse": true },
+        { "start": 5625, "num": 34 },
+        { "start": 5580, "num": 34, "reverse": true },
+        { "start": 5535, "num": 34 },
+        { "start": 5490, "num": 34, "reverse": true },
+        { "start": 5445, "num": 34 },
+        { "start": 5400, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub13On & $cub13Flip & !$cub13HackInt",
       "protocol": "artnet",
       "host": "$cub13",
       "universe": 75,
@@ -1989,7 +2471,25 @@
       ]
     },
     {
-      "enabled": "$cub14On & $cub14Flip",
+      "enabled": "$cub13On & $cub13Flip & $cub13HackInt",
+      "protocol": "artnet",
+      "host": "$cub13",
+      "universe": 75,
+      "segments": [
+        { "start": 14806, "num": 33 },
+        { "start": 14760, "num": 34, "reverse": true },
+        { "start": 14715, "num": 34 },
+        { "start": 14670, "num": 34, "reverse": true },
+        { "start": 14625, "num": 34 },
+        { "start": 14580, "num": 34, "reverse": true },
+        { "start": 14535, "num": 34 },
+        { "start": 14490, "num": 34, "reverse": true },
+        { "start": 14445, "num": 34 },
+        { "start": 14400, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub14On & $cub14Flip & !$cub14HackExt",
       "protocol": "artnet",
       "host": "$cub14",
       "universe": 78,
@@ -2007,7 +2507,25 @@
       ]
     },
     {
-      "enabled": "$cub14On & $cub14Flip",
+      "enabled": "$cub14On & $cub14Flip & $cub14HackExt",
+      "protocol": "artnet",
+      "host": "$cub14",
+      "universe": 78,
+      "segments": [
+        { "start": 6256, "num": 44 },
+        { "start": 6210, "num": 45, "reverse": true },
+        { "start": 6165, "num": 45 },
+        { "start": 6120, "num": 45, "reverse": true },
+        { "start": 6075, "num": 45 },
+        { "start": 6030, "num": 45, "reverse": true },
+        { "start": 5985, "num": 45 },
+        { "start": 5940, "num": 45, "reverse": true },
+        { "start": 5895, "num": 45 },
+        { "start": 5850, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub14On & $cub14Flip & !$cub14HackInt",
       "protocol": "artnet",
       "host": "$cub14",
       "universe": 81,
@@ -2025,7 +2543,25 @@
       ]
     },
     {
-      "enabled": "$cub15On & $cub15Flip",
+      "enabled": "$cub14On & $cub14Flip & $cub14HackInt",
+      "protocol": "artnet",
+      "host": "$cub14",
+      "universe": 81,
+      "segments": [
+        { "start": 15256, "num": 44 },
+        { "start": 15210, "num": 45, "reverse": true },
+        { "start": 15165, "num": 45 },
+        { "start": 15120, "num": 45, "reverse": true },
+        { "start": 15075, "num": 45 },
+        { "start": 15030, "num": 45, "reverse": true },
+        { "start": 14985, "num": 45 },
+        { "start": 14940, "num": 45, "reverse": true },
+        { "start": 14895, "num": 45 },
+        { "start": 14850, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub15On & $cub15Flip & !$cub15HackExt",
       "protocol": "artnet",
       "host": "$cub15",
       "universe": 84,
@@ -2043,7 +2579,25 @@
       ]
     },
     {
-      "enabled": "$cub15On & $cub15Flip",
+      "enabled": "$cub15On & $cub15Flip & $cub15HackExt",
+      "protocol": "artnet",
+      "host": "$cub15",
+      "universe": 84,
+      "segments": [
+        { "start": 6706, "num": 44 },
+        { "start": 6660, "num": 45, "reverse": true },
+        { "start": 6615, "num": 45 },
+        { "start": 6570, "num": 45, "reverse": true },
+        { "start": 6525, "num": 45 },
+        { "start": 6480, "num": 45, "reverse": true },
+        { "start": 6435, "num": 45 },
+        { "start": 6390, "num": 45, "reverse": true },
+        { "start": 6345, "num": 45 },
+        { "start": 6300, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub15On & $cub15Flip & !$cub15HackInt",
       "protocol": "artnet",
       "host": "$cub15",
       "universe": 87,
@@ -2061,7 +2615,25 @@
       ]
     },
     {
-      "enabled": "$cub16On & $cub16Flip",
+      "enabled": "$cub15On & $cub15Flip & $cub15HackInt",
+      "protocol": "artnet",
+      "host": "$cub15",
+      "universe": 87,
+      "segments": [
+        { "start": 15706, "num": 44 },
+        { "start": 15660, "num": 45, "reverse": true },
+        { "start": 15615, "num": 45 },
+        { "start": 15570, "num": 45, "reverse": true },
+        { "start": 15525, "num": 45 },
+        { "start": 15480, "num": 45, "reverse": true },
+        { "start": 15435, "num": 45 },
+        { "start": 15390, "num": 45, "reverse": true },
+        { "start": 15345, "num": 45 },
+        { "start": 15300, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub16On & $cub16Flip & !$cub16HackExt",
       "protocol": "artnet",
       "host": "$cub16",
       "universe": 90,
@@ -2079,7 +2651,25 @@
       ]
     },
     {
-      "enabled": "$cub16On & $cub16Flip",
+      "enabled": "$cub16On & $cub16Flip & $cub16HackExt",
+      "protocol": "artnet",
+      "host": "$cub16",
+      "universe": 90,
+      "segments": [
+        { "start": 7156, "num": 44 },
+        { "start": 7110, "num": 45, "reverse": true },
+        { "start": 7065, "num": 45 },
+        { "start": 7020, "num": 45, "reverse": true },
+        { "start": 6975, "num": 45 },
+        { "start": 6930, "num": 45, "reverse": true },
+        { "start": 6885, "num": 45 },
+        { "start": 6840, "num": 45, "reverse": true },
+        { "start": 6795, "num": 45 },
+        { "start": 6750, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub16On & $cub16Flip & !$cub16HackInt",
       "protocol": "artnet",
       "host": "$cub16",
       "universe": 93,
@@ -2097,7 +2687,25 @@
       ]
     },
     {
-      "enabled": "$cub17On & $cub17Flip",
+      "enabled": "$cub16On & $cub16Flip & $cub16HackInt",
+      "protocol": "artnet",
+      "host": "$cub16",
+      "universe": 93,
+      "segments": [
+        { "start": 16156, "num": 44 },
+        { "start": 16110, "num": 45, "reverse": true },
+        { "start": 16065, "num": 45 },
+        { "start": 16020, "num": 45, "reverse": true },
+        { "start": 15975, "num": 45 },
+        { "start": 15930, "num": 45, "reverse": true },
+        { "start": 15885, "num": 45 },
+        { "start": 15840, "num": 45, "reverse": true },
+        { "start": 15795, "num": 45 },
+        { "start": 15750, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub17On & $cub17Flip & !$cub17HackExt",
       "protocol": "artnet",
       "host": "$cub17",
       "universe": 96,
@@ -2115,7 +2723,25 @@
       ]
     },
     {
-      "enabled": "$cub17On & $cub17Flip",
+      "enabled": "$cub17On & $cub17Flip & $cub17HackExt",
+      "protocol": "artnet",
+      "host": "$cub17",
+      "universe": 96,
+      "segments": [
+        { "start": 7606, "num": 44 },
+        { "start": 7560, "num": 45, "reverse": true },
+        { "start": 7515, "num": 45 },
+        { "start": 7470, "num": 45, "reverse": true },
+        { "start": 7425, "num": 45 },
+        { "start": 7380, "num": 45, "reverse": true },
+        { "start": 7335, "num": 45 },
+        { "start": 7290, "num": 45, "reverse": true },
+        { "start": 7245, "num": 45 },
+        { "start": 7200, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub17On & $cub17Flip & !$cub17HackInt",
       "protocol": "artnet",
       "host": "$cub17",
       "universe": 99,
@@ -2133,7 +2759,25 @@
       ]
     },
     {
-      "enabled": "$cub18On & $cub18Flip",
+      "enabled": "$cub17On & $cub17Flip & $cub17HackInt",
+      "protocol": "artnet",
+      "host": "$cub17",
+      "universe": 99,
+      "segments": [
+        { "start": 16606, "num": 44 },
+        { "start": 16560, "num": 45, "reverse": true },
+        { "start": 16515, "num": 45 },
+        { "start": 16470, "num": 45, "reverse": true },
+        { "start": 16425, "num": 45 },
+        { "start": 16380, "num": 45, "reverse": true },
+        { "start": 16335, "num": 45 },
+        { "start": 16290, "num": 45, "reverse": true },
+        { "start": 16245, "num": 45 },
+        { "start": 16200, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub18On & $cub18Flip & !$cub18HackExt",
       "protocol": "artnet",
       "host": "$cub18",
       "universe": 102,
@@ -2151,7 +2795,25 @@
       ]
     },
     {
-      "enabled": "$cub18On & $cub18Flip",
+      "enabled": "$cub18On & $cub18Flip & $cub18HackExt",
+      "protocol": "artnet",
+      "host": "$cub18",
+      "universe": 102,
+      "segments": [
+        { "start": 8056, "num": 33 },
+        { "start": 8010, "num": 34, "reverse": true },
+        { "start": 7965, "num": 34 },
+        { "start": 7920, "num": 34, "reverse": true },
+        { "start": 7875, "num": 34 },
+        { "start": 7830, "num": 34, "reverse": true },
+        { "start": 7785, "num": 34 },
+        { "start": 7740, "num": 34, "reverse": true },
+        { "start": 7695, "num": 34 },
+        { "start": 7650, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub18On & $cub18Flip & !$cub18HackInt",
       "protocol": "artnet",
       "host": "$cub18",
       "universe": 105,
@@ -2169,7 +2831,25 @@
       ]
     },
     {
-      "enabled": "$cub19On & $cub19Flip",
+      "enabled": "$cub18On & $cub18Flip & $cub18HackInt",
+      "protocol": "artnet",
+      "host": "$cub18",
+      "universe": 105,
+      "segments": [
+        { "start": 17056, "num": 33 },
+        { "start": 17010, "num": 34, "reverse": true },
+        { "start": 16965, "num": 34 },
+        { "start": 16920, "num": 34, "reverse": true },
+        { "start": 16875, "num": 34 },
+        { "start": 16830, "num": 34, "reverse": true },
+        { "start": 16785, "num": 34 },
+        { "start": 16740, "num": 34, "reverse": true },
+        { "start": 16695, "num": 34 },
+        { "start": 16650, "num": 34, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub19On & $cub19Flip & !$cub19HackExt",
       "protocol": "artnet",
       "host": "$cub19",
       "universe": 108,
@@ -2187,7 +2867,25 @@
       ]
     },
     {
-      "enabled": "$cub19On & $cub19Flip",
+      "enabled": "$cub19On & $cub19Flip & $cub19HackExt",
+      "protocol": "artnet",
+      "host": "$cub19",
+      "universe": 108,
+      "segments": [
+        { "start": 8506, "num": 44 },
+        { "start": 8460, "num": 45, "reverse": true },
+        { "start": 8415, "num": 45 },
+        { "start": 8370, "num": 45, "reverse": true },
+        { "start": 8325, "num": 45 },
+        { "start": 8280, "num": 45, "reverse": true },
+        { "start": 8235, "num": 45 },
+        { "start": 8190, "num": 45, "reverse": true },
+        { "start": 8145, "num": 45 },
+        { "start": 8100, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub19On & $cub19Flip & !$cub19HackInt",
       "protocol": "artnet",
       "host": "$cub19",
       "universe": 111,
@@ -2205,7 +2903,25 @@
       ]
     },
     {
-      "enabled": "$cub20On & $cub20Flip & !$hackCub20",
+      "enabled": "$cub19On & $cub19Flip & $cub19HackInt",
+      "protocol": "artnet",
+      "host": "$cub19",
+      "universe": 111,
+      "segments": [
+        { "start": 17506, "num": 44 },
+        { "start": 17460, "num": 45, "reverse": true },
+        { "start": 17415, "num": 45 },
+        { "start": 17370, "num": 45, "reverse": true },
+        { "start": 17325, "num": 45 },
+        { "start": 17280, "num": 45, "reverse": true },
+        { "start": 17235, "num": 45 },
+        { "start": 17190, "num": 45, "reverse": true },
+        { "start": 17145, "num": 45 },
+        { "start": 17100, "num": 45, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cub20On & $cub20Flip & !$cub20HackExt",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 114,
@@ -2223,7 +2939,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & $cub20Flip & $hackCub20",
+      "enabled": "$cub20On & $cub20Flip & $cub20HackExt",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 114,
@@ -2241,7 +2957,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & $cub20Flip & !$hackCub20",
+      "enabled": "$cub20On & $cub20Flip & !$cub20HackInt",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 117,
@@ -2259,7 +2975,7 @@
       ]
     },
     {
-      "enabled": "$cub20On & $cub20Flip & $hackCub20",
+      "enabled": "$cub20On & $cub20Flip & $cub20HackInt",
       "protocol": "artnet",
       "host": "$cub20",
       "universe": 117,
@@ -2498,24 +3214,6 @@
       "host": "$cyl08",
       "universe": 162,
       "segments": [
-        { "start": 20967, "num": 43 },
-        { "start": 20924, "num": 43, "reverse": true },
-        { "start": 20881, "num": 43 },
-        { "start": 20838, "num": 43, "reverse": true },
-        { "start": 20795, "num": 43 },
-        { "start": 20752, "num": 43, "reverse": true },
-        { "start": 20709, "num": 43 },
-        { "start": 20666, "num": 43, "reverse": true },
-        { "start": 20623, "num": 43 },
-        { "start": 20580, "num": 43, "reverse": true }
-      ]
-    },
-    {
-      "enabled": "$cyl08On & $cyl08Flip",
-      "protocol": "artnet",
-      "host": "$cyl08",
-      "universe": 165,
-      "segments": [
         { "start": 26127, "num": 43 },
         { "start": 26084, "num": 43, "reverse": true },
         { "start": 26041, "num": 43 },
@@ -2526,6 +3224,24 @@
         { "start": 25826, "num": 43, "reverse": true },
         { "start": 25783, "num": 43 },
         { "start": 25740, "num": 43, "reverse": true }
+      ]
+    },
+    {
+      "enabled": "$cyl08On & $cyl08Flip",
+      "protocol": "artnet",
+      "host": "$cyl08",
+      "universe": 165,
+      "segments": [
+        { "start": 20967, "num": 43 },
+        { "start": 20924, "num": 43, "reverse": true },
+        { "start": 20881, "num": 43 },
+        { "start": 20838, "num": 43, "reverse": true },
+        { "start": 20795, "num": 43 },
+        { "start": 20752, "num": 43, "reverse": true },
+        { "start": 20709, "num": 43 },
+        { "start": 20666, "num": 43, "reverse": true },
+        { "start": 20623, "num": 43 },
+        { "start": 20580, "num": 43, "reverse": true }
       ]
     },
     {
