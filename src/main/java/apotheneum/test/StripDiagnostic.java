@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -53,17 +52,17 @@ public class StripDiagnostic extends ApotheneumPattern {
     setColors(LXColor.BLACK);
     setApotheneumColor(LXColor.BLACK);
 
-    for (LXModel column : Apotheneum.cube.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cube.exterior.columns) {
       renderColumn(column);
     }
-    for (LXModel column : Apotheneum.cylinder.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cylinder.exterior.columns) {
       renderColumn(column);
     }
     copyExterior();
 
   }
 
-  protected void renderColumn(LXModel model) {
+  protected void renderColumn(Apotheneum.Column model) {
     final int start = this.start.getValuei();
     final int num = this.num.getValuei();
     final int mute = this.mute.getValuei();

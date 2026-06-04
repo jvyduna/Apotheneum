@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -81,28 +80,28 @@ public class DoorMask extends ApotheneumEffect {
     }
 
     int i = 0;
-    for (LXModel column : Apotheneum.cube.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cube.exterior.columns) {
       renderColumn(column, i, true, enabledAmount);
       ++i;
     }
     i = 0;
-    for (LXModel column : Apotheneum.cube.interior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cube.interior.columns) {
       renderColumn(column, i, true, enabledAmount);
       ++i;
     }
     i = 0;
-    for (LXModel column : Apotheneum.cylinder.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cylinder.exterior.columns) {
       renderColumn(column, i, false, enabledAmount);
       ++i;
     }
     i = 0;
-    for (LXModel column : Apotheneum.cylinder.interior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cylinder.interior.columns) {
       renderColumn(column, i, false, enabledAmount);
       ++i;
     }
   }
 
-  protected void renderColumn(LXModel column, int index, boolean isCube, double amount) {
+  protected void renderColumn(Apotheneum.Column column, int index, boolean isCube, double amount) {
     int xDist = 0;
     if (isCube) {
       xDist = (int) LXUtils.max(0, Math.abs((index % 50) - 24.5) - 4.5);

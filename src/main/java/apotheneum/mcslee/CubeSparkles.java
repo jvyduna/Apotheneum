@@ -127,11 +127,11 @@ public class CubeSparkles extends ApotheneumPattern implements ApotheneumPattern
 
   private class Sparkle {
 
-    private final LXModel column;
+    private final Apotheneum.Column column;
     private final float basePos;
     private float basis;
 
-    private Sparkle(LXModel[] columns) {
+    private Sparkle(Apotheneum.Column[] columns) {
       this.column = columns[LXUtils.randomi(columns.length-1)];
       this.basePos = LXUtils.randomf(maxHeight.getValuef());
     }

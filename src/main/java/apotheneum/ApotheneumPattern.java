@@ -20,7 +20,6 @@ package apotheneum;
 
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.pattern.LXPattern;
 
 public abstract class ApotheneumPattern extends LXPattern {
@@ -79,8 +78,8 @@ public abstract class ApotheneumPattern extends LXPattern {
     assertExists();
     if ((from != null) && (to != null)) {
       int colIndex = 0;
-      for (LXModel fromCol : from.columns) {
-        LXModel toCol = to.columns[to.columns.length - 1 - colIndex];
+      for (Apotheneum.Column fromCol : from.columns) {
+        Apotheneum.Column toCol = to.columns[to.columns.length - 1 - colIndex];
         System.arraycopy(colors, fromCol.points[0].index, colors, toCol.points[0].index, fromCol.size);
         ++colIndex;
       }
@@ -120,15 +119,19 @@ public abstract class ApotheneumPattern extends LXPattern {
   }
 
   protected void setColor(Apotheneum.Orientation orientation, int color) {
-    for (LXModel column : orientation.columns()) {
+    for (Apotheneum.Column column : orientation.columns()) {
       setColor(column, color);
     }
   }
 
   protected void setColor(Apotheneum.Cube.Face face, int color) {
-    for (LXModel column : face.columns) {
+    for (Apotheneum.Column column : face.columns) {
       setColor(column, color);
     }
+  }
+
+  protected void setColor(Apotheneum.Column column, int color) {
+    setColor(column.model, color);
   }
 
   protected abstract void render(double deltaMs);

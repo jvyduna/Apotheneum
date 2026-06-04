@@ -27,7 +27,6 @@ import heronarts.lx.LXLayer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.mixer.LXChannel;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.OscMessage;
 import heronarts.lx.parameter.BooleanParameter;
@@ -106,7 +105,7 @@ public class Raindrops extends ApotheneumPattern implements ApotheneumPattern.Mi
   private class Drop extends LXLayer {
 
     private final Apotheneum.Orientation orientation;
-    private final LXModel column;
+    private final Apotheneum.Column column;
     private final int ringIndex;
     private double pos;
     private double velocity = 0;

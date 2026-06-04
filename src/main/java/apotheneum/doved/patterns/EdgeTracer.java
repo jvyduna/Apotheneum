@@ -6,7 +6,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import java.util.ArrayList;
@@ -104,13 +103,13 @@ public class EdgeTracer extends ApotheneumPattern {
     // Door handling utility methods
     private static class DoorTraversal {
         
-        static void addPointsWithDoorHandling(List<LXPoint> path, LXModel[] columns, 
+        static void addPointsWithDoorHandling(List<LXPoint> path, Apotheneum.Column[] columns,
                                              Apotheneum.Orientation orientation, int faceOffset, 
                                              int heightConstant, int doorHeight) {
             for (int col = 0; col < columns.length; col++) {
                 int globalCol = faceOffset + col;
                 int available = orientation.available(globalCol);
-                LXModel column = columns[col];
+                Apotheneum.Column column = columns[col];
                 
                 boolean isInDoor = available < heightConstant;
                 boolean nextInDoor = (col < columns.length - 1) && 
@@ -133,14 +132,14 @@ public class EdgeTracer extends ApotheneumPattern {
                     
                     // If this is the last door column, add the descent
                     if (!nextInDoor && col < columns.length - 1) {
-                        LXModel nextColumn = columns[col + 1];
+                        Apotheneum.Column nextColumn = columns[col + 1];
                         addDescentTransition(path, nextColumn, heightConstant, doorHeight);
                     }
                 }
             }
         }
         
-        static void addVerticalTransition(List<LXPoint> path, LXModel column, int heightConstant, int doorHeight) {
+        static void addVerticalTransition(List<LXPoint> path, Apotheneum.Column column, int heightConstant, int doorHeight) {
             for (int y = heightConstant - 2; y >= heightConstant - doorHeight; y--) {
                 if (y >= 0 && y < column.points.length) {
                     path.add(column.points[y]);
@@ -148,7 +147,7 @@ public class EdgeTracer extends ApotheneumPattern {
             }
         }
         
-        static void addDescentTransition(List<LXPoint> path, LXModel nextColumn, int heightConstant, int doorHeight) {
+        static void addDescentTransition(List<LXPoint> path, Apotheneum.Column nextColumn, int heightConstant, int doorHeight) {
             for (int y = heightConstant - doorHeight; y < heightConstant; y++) {
                 if (y >= 0 && y < nextColumn.points.length) {
                     path.add(nextColumn.points[y]);
@@ -164,21 +163,21 @@ public class EdgeTracer extends ApotheneumPattern {
                                                    Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
             
             // Right edge (bottom to top)
-            LXModel rightColumn = cubeFace.columns[cubeFace.columns.length - 1];
+            Apotheneum.Column rightColumn = cubeFace.columns[cubeFace.columns.length - 1];
             for (int y = rightColumn.points.length - 2; y >= 0; y--) {
                 facePath.add(rightColumn.points[y]);
             }
             
             // Top edge (right to left)
             for (int col = cubeFace.columns.length - 2; col >= 0; col--) {
-                LXModel column = cubeFace.columns[col];
+                Apotheneum.Column column = cubeFace.columns[col];
                 if (column.points.length > 0) {
                     facePath.add(column.points[0]);
                 }
             }
             
             // Left edge (top to bottom) - but don't duplicate the starting point
-            LXModel leftColumn = cubeFace.columns[0];
+            Apotheneum.Column leftColumn = cubeFace.columns[0];
             int leftAvailable = orientation.available(face * Apotheneum.GRID_WIDTH);
             int startY = (leftAvailable < Apotheneum.GRID_HEIGHT) ? leftAvailable - 1 : leftColumn.points.length - 2;
             
@@ -193,7 +192,7 @@ public class EdgeTracer extends ApotheneumPattern {
             for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
                 int globalCol = face * Apotheneum.GRID_WIDTH + col;
                 int available = orientation.available(globalCol);
-                LXModel column = orientation.columns()[globalCol];
+                Apotheneum.Column column = orientation.columns()[globalCol];
                 
                 boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
                 boolean nextInDoor = (col < Apotheneum.GRID_WIDTH - 1) && 
@@ -210,7 +209,7 @@ public class EdgeTracer extends ApotheneumPattern {
                     }
                     if (!nextInDoor && col < Apotheneum.GRID_WIDTH - 1) {
                         int nextGlobalCol = face * Apotheneum.GRID_WIDTH + col + 1;
-                        LXModel nextColumn = orientation.columns()[nextGlobalCol];
+                        Apotheneum.Column nextColumn = orientation.columns()[nextGlobalCol];
                         addDescentTransition(facePath, nextColumn, Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
                     }
                 }
@@ -218,7 +217,7 @@ public class EdgeTracer extends ApotheneumPattern {
             
             // Right edge (bottom to top)
             int rightGlobalCol = face * Apotheneum.GRID_WIDTH + (Apotheneum.GRID_WIDTH - 1);
-            LXModel rightColumn = orientation.columns()[rightGlobalCol];
+            Apotheneum.Column rightColumn = orientation.columns()[rightGlobalCol];
             for (int y = rightColumn.points.length - 2; y >= 0; y--) {
                 facePath.add(rightColumn.points[y]);
             }
@@ -226,7 +225,7 @@ public class EdgeTracer extends ApotheneumPattern {
             // Top edge (right to left)
             for (int col = Apotheneum.GRID_WIDTH - 2; col >= 0; col--) {
                 int globalCol = face * Apotheneum.GRID_WIDTH + col;
-                LXModel column = orientation.columns()[globalCol];
+                Apotheneum.Column column = orientation.columns()[globalCol];
                 if (column.points.length > 0) {
                     facePath.add(column.points[0]);
                 }
@@ -234,7 +233,7 @@ public class EdgeTracer extends ApotheneumPattern {
             
             // Left edge (top to bottom) - but don't duplicate the starting point
             int leftGlobalCol = face * Apotheneum.GRID_WIDTH;
-            LXModel leftColumn = orientation.columns()[leftGlobalCol];
+            Apotheneum.Column leftColumn = orientation.columns()[leftGlobalCol];
             int leftAvailable = orientation.available(leftGlobalCol);
             int startY = (leftAvailable < Apotheneum.GRID_HEIGHT) ? leftAvailable - 1 : leftColumn.points.length - 2;
             
@@ -292,7 +291,7 @@ public class EdgeTracer extends ApotheneumPattern {
         // Simple top edge - no doors to worry about
         for (int face = 0; face < 4; face++) {
             Apotheneum.Cube.Face cubeFace = cube.faces[face];
-            for (LXModel column : cubeFace.columns) {
+            for (Apotheneum.Column column : cubeFace.columns) {
                 if (column.points.length > 0) {
                     cubeTopPath.add(column.points[0]);
                 }
@@ -329,7 +328,7 @@ public class EdgeTracer extends ApotheneumPattern {
             for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
                 int globalCol = face * Apotheneum.GRID_WIDTH + col;
                 int available = cube.interior.available(globalCol);
-                LXModel column = cube.interior.columns()[globalCol];
+                Apotheneum.Column column = cube.interior.columns()[globalCol];
                 
                 boolean isInDoor = available < Apotheneum.GRID_HEIGHT;
                 boolean nextInDoor = (col < Apotheneum.GRID_WIDTH - 1) && 
@@ -346,7 +345,7 @@ public class EdgeTracer extends ApotheneumPattern {
                     }
                     if (!nextInDoor && col < Apotheneum.GRID_WIDTH - 1) {
                         int nextGlobalCol = face * Apotheneum.GRID_WIDTH + col + 1;
-                        LXModel nextColumn = cube.interior.columns()[nextGlobalCol];
+                        Apotheneum.Column nextColumn = cube.interior.columns()[nextGlobalCol];
                         DoorTraversal.addDescentTransition(cubeBottomPathInterior, nextColumn, Apotheneum.GRID_HEIGHT, Apotheneum.DOOR_HEIGHT);
                     }
                 }
@@ -365,7 +364,7 @@ public class EdgeTracer extends ApotheneumPattern {
         for (int face = 0; face < 4; face++) {
             for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
                 int globalCol = face * Apotheneum.GRID_WIDTH + col;
-                LXModel column = cube.interior.columns[globalCol];
+                Apotheneum.Column column = cube.interior.columns[globalCol];
                 if (column.points.length > 0) {
                     cubeTopPathInterior.add(column.points[0]);
                 }
@@ -408,7 +407,7 @@ public class EdgeTracer extends ApotheneumPattern {
         for (int col = 0; col < cubeFace.columns.length; col++) {
             int globalCol = frontFace * Apotheneum.GRID_WIDTH + col;
             int available = orientation.available(globalCol);
-            LXModel column = cubeFace.columns[col];
+            Apotheneum.Column column = cubeFace.columns[col];
             
             // Always use the last available LED (bottom-most) from each column
             if (available > 0 && (available - 1) < column.points.length) {
@@ -429,7 +428,7 @@ public class EdgeTracer extends ApotheneumPattern {
         for (int col = 0; col < Apotheneum.GRID_WIDTH; col++) {
             int globalCol = frontFace * Apotheneum.GRID_WIDTH + col;
             int available = orientation.available(globalCol);
-            LXModel column = orientation.columns()[globalCol];
+            Apotheneum.Column column = orientation.columns()[globalCol];
             
             // Always use the last available LED (bottom-most) from each column
             if (available > 0 && (available - 1) < column.points.length) {

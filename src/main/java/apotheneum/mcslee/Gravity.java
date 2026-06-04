@@ -25,7 +25,6 @@ import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXLayer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.OscInt;
 import heronarts.lx.osc.OscMessage;
@@ -44,7 +43,7 @@ public class Gravity extends ApotheneumPattern implements UIDeviceControls<Gravi
   private class Orb extends LXLayer {
 
     private final int numCols;
-    private final LXModel[] columns;
+    private final Apotheneum.Column[] columns;
     private final int yMax;
     private final float rnd;
     private float x;
@@ -54,7 +53,7 @@ public class Gravity extends ApotheneumPattern implements UIDeviceControls<Gravi
     private final float vxd;
     private final boolean box;
 
-    private Orb(LX lx, LXModel[] columns, boolean box) {
+    private Orb(LX lx, Apotheneum.Column[] columns, boolean box) {
       super(lx);
       this.columns = columns;
       this.numCols = columns.length;
