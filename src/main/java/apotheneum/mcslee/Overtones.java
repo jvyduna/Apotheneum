@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.OscMessage;
 import heronarts.lx.parameter.BooleanParameter;
@@ -114,7 +113,7 @@ public class Overtones extends ApotheneumPattern {
     }
 
     // Map tones over all strips
-    for (LXModel strip : Apotheneum.cylinder.exterior.columns) {
+    for (Apotheneum.Column strip : Apotheneum.cylinder.exterior.columns) {
       final int sm = si % NUM_TONES;
       final int sd = si / NUM_TONES;
       final int toneIndex = (sd % 2 == 0) ? sm : (NUM_TONES - sm);

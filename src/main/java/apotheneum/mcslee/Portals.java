@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.utils.LXUtils;
@@ -75,19 +74,19 @@ public class Portals extends ApotheneumPattern {
     setColors(LXColor.BLACK);
     setApotheneumColor(LXColor.BLACK);
     int i = 0;
-    for (LXModel column : Apotheneum.cube.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cube.exterior.columns) {
       renderColumn(column, i, true);
       ++i;
     }
     i = 0;
-    for (LXModel column : Apotheneum.cylinder.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cylinder.exterior.columns) {
       renderColumn(column, i, false);
       ++i;
     }
     copyExterior();
   }
 
-  protected void renderColumn(LXModel column, int index, boolean isCube) {
+  protected void renderColumn(Apotheneum.Column column, int index, boolean isCube) {
     int xDist = 0;
     if (isCube) {
       xDist = (int) LXUtils.max(0, Math.abs((index % 50) - 24.5) - 4.5);

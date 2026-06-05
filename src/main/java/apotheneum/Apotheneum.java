@@ -63,6 +63,7 @@ public class Apotheneum {
     public int height() {
       return orientations()[0].height();
     }
+
   }
 
   public abstract static class Orientation {
@@ -70,13 +71,13 @@ public class Apotheneum {
     public static final int EXTERIOR = 0;
     public static final int INTERIOR = 1;
 
-    public abstract LXModel[] columns();
+    public abstract Column[] columns();
 
     public LXPoint point(int x, int y) {
       return column(x).points[y];
     }
 
-    public LXModel column(int index) {
+    public Column column(int index) {
       return columns()[index];
     }
 
@@ -97,18 +98,71 @@ public class Apotheneum {
     }
   }
 
-  public static class Ring {
+  /**
+   * One sequential set of points in Apotheneum.
+   */
+  public abstract static class Sequence {
 
     public final int index;
     public final LXPoint[] points;
 
-    private Ring(int index, LXModel[] columns) {
+    Sequence(int index, LXPoint[] points) {
       this.index = index;
-      this.points = new LXPoint[columns.length];
-      int i = 0;
-      for (LXModel column : columns) {
-        this.points[i++] = column.points[index];
+      this.points = points;
+    }
+  }
+
+  /**
+   * A vertical sequence of points. A thin wrapper around the LXModel that defined the column.
+   * The super class tracks the index of this column within the parent.
+   */
+  public static class Column extends Sequence {
+
+    public final LXModel model;
+
+    /**
+     * Number of points in the column
+     */
+    public final int size;
+
+    public Column(LXModel model, int index) {
+      super(index, model.points);
+      this.model = model;
+      this.size = model.size;
+    }
+
+    /**
+     * Create an array of columns from an array of LXModels
+     */
+    static Column[] arrayFrom(LXModel[] models) {
+      Column[] columns = new Column[models.length];
+      for (int i = 0; i < models.length; ++i) {
+        columns[i] = new Column(models[i], i);
       }
+      return columns;
+    }
+  }
+
+  public abstract static class HorizontalSequence extends Sequence {
+
+    private static LXPoint[] extractPoints(final int index, final Column[] columns) {
+      LXPoint[] points = new LXPoint[columns.length];
+      int i = 0;
+      for (Column column : columns) {
+        points[i++] = column.points[index];
+      }
+      return points;
+    }
+
+    HorizontalSequence(int index, Column[] columns) {
+      super(index, extractPoints(index, columns));
+    }
+  }
+
+  public static class Ring extends HorizontalSequence {
+
+    public Ring(int index, Column[] columns) {
+      super(index, columns);
     }
   }
 
@@ -127,7 +181,7 @@ public class Apotheneum {
 
       public final Face[] faces;
 
-      public final LXModel[] columns;
+      public final Column[] columns;
       public final Ring[] rings;
 
       private Orientation(LXModel model, String suffix) {
@@ -137,7 +191,7 @@ public class Apotheneum {
         this.left = new Face(model.sub("cubeLeft" + suffix).get(0));
         this.faces = new Face[] { this.front, this.right, this.back, this.left };
 
-        this.columns = new LXModel[this.front.columns.length + this.right.columns.length + this.back.columns.length + this.left.columns.length];
+        this.columns = new Column[this.front.columns.length + this.right.columns.length + this.back.columns.length + this.left.columns.length];
         int cIndex = 0;
         System.arraycopy(this.front.columns, 0, this.columns, cIndex, this.front.columns.length);
         cIndex += this.front.columns.length;
@@ -160,7 +214,7 @@ public class Apotheneum {
       }
 
       @Override
-      public LXModel[] columns() {
+      public Column[] columns() {
         return this.columns;
       }
 
@@ -181,18 +235,18 @@ public class Apotheneum {
 
     public static class Face {
       public final LXModel model;
-      public final LXModel[] columns;
+      public final Column[] columns;
       public final Row[] rows;
 
       private Face(LXModel face) {
         this.model = face;
-        this.columns = face.children;
+        this.columns = Column.arrayFrom(face.children);
         this.rows = new Row[GRID_HEIGHT];
 
         if (this.columns.length != GRID_WIDTH) {
           throw new IllegalStateException("Apotheneum face expects " + GRID_WIDTH + " columns, found " + this.columns.length);
         }
-        for (LXModel column : this.columns) {
+        for (Column column : this.columns) {
           if (column.size != GRID_HEIGHT) {
             throw new IllegalStateException("Apotheneum cube column expects " + GRID_HEIGHT + " points, found " + column.size);
           }
@@ -205,18 +259,10 @@ public class Apotheneum {
 
     }
 
-    public static class Row {
+    public static class Row extends HorizontalSequence {
 
-      public final int index;
-      public final LXPoint[] points;
-
-      private Row(int index, LXModel[] columns) {
-        this.index = index;
-        this.points = new LXPoint[columns.length];
-        int i = 0;
-        for (LXModel column : columns) {
-          this.points[i++] = column.points[index];
-        }
+      private Row(int index, Column[] columns) {
+        super(index, columns);
       }
     }
 
@@ -224,7 +270,7 @@ public class Apotheneum {
 
       public static final int LENGTH = 200;
 
-      private Ring(int index, LXModel[] columns) {
+      private Ring(int index, Column[] columns) {
         super(index, columns);
       }
     }
@@ -259,15 +305,15 @@ public class Apotheneum {
 
     public static class Orientation extends Apotheneum.Orientation {
       public final int size;
-      public final LXModel[] columns;
+      public final Column[] columns;
       public final Ring[] rings;
 
       private Orientation(LXModel model, String suffix) {
-        this.columns = model.sub("cylinder" + suffix).toArray(new LXModel[0]);
+        this.columns = Column.arrayFrom(model.sub("cylinder" + suffix).toArray(new LXModel[0]));
         if (this.columns.length != Ring.LENGTH) {
           throw new IllegalStateException("Apotheneum cylinder expects " + Ring.LENGTH + " columns, found " + this.columns.length);
         }
-        for (LXModel column : this.columns) {
+        for (Column column : this.columns) {
           if (column.size != CYLINDER_HEIGHT) {
             throw new IllegalStateException("Apotheneum cylinder column expects " + CYLINDER_HEIGHT + " points, found " + column.size);
           }
@@ -281,7 +327,7 @@ public class Apotheneum {
       }
 
       @Override
-      public LXModel[] columns() {
+      public Column[] columns() {
         return this.columns;
       }
 
@@ -303,7 +349,7 @@ public class Apotheneum {
 
       public static final int LENGTH = 120;
 
-      private Ring(int index, LXModel[] columns) {
+      private Ring(int index, Column[] columns) {
         super(index, columns);
       }
     }

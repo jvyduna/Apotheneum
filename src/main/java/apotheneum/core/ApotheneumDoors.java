@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BooleanParameter;
 
 @LXCategory("Apotheneum/core")
@@ -92,7 +91,7 @@ public class ApotheneumDoors extends ApotheneumEffect {
 
       // Mute cube face doors
       for (Apotheneum.Cube.Face face : Apotheneum.cube.faces) {
-        final LXModel column = face.columns[FACE_DOOR_START_COLUMN + c];
+        final Apotheneum.Column column = face.columns[FACE_DOOR_START_COLUMN + c];
         for (int i = FACE_DOOR_START_PIXEL; i < column.points.length; ++i) {
           colors[column.points[i].index] = LXColor.BLACK;
         }
@@ -100,12 +99,12 @@ public class ApotheneumDoors extends ApotheneumEffect {
 
       // Mute cylinder doors
       for (int cylinderColumn : CYLINDER_DOOR_START_COLUMNS) {
-        final LXModel exterior = Apotheneum.cylinder.exterior.columns[cylinderColumn + c];
+        final Apotheneum.Column exterior = Apotheneum.cylinder.exterior.columns[cylinderColumn + c];
         for (int i = CYLINDER_DOOR_START_PIXEL; i < exterior.points.length; ++i) {
           colors[exterior.points[i].index] = LXColor.BLACK;
         }
         if (Apotheneum.cylinder.interior != null) {
-          final LXModel interior = Apotheneum.cylinder.interior.columns[cylinderColumn + c];
+          final Apotheneum.Column interior = Apotheneum.cylinder.interior.columns[cylinderColumn + c];
           for (int i = CYLINDER_DOOR_START_PIXEL; i < exterior.points.length; ++i) {
             colors[interior.points[i].index] = LXColor.BLACK;
           }

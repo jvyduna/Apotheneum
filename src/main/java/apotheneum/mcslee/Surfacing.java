@@ -30,7 +30,6 @@ import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
@@ -216,7 +215,7 @@ public class Surfacing extends ApotheneumPattern implements UIDeviceControls<Sur
 
     int cylinderIndex = 0;
     if (this.cylinderOn.isOn()) {
-      for (LXModel column : Apotheneum.cylinder.exterior.columns) {
+      for (Apotheneum.Column column : Apotheneum.cylinder.exterior.columns) {
         renderColumn(column, cylinderIndex, level);
         ++cylinderIndex;
       }
@@ -225,7 +224,7 @@ public class Surfacing extends ApotheneumPattern implements UIDeviceControls<Sur
 
     if (this.cubeOn.isOn()) {
       cylinderIndex = -1;
-      for (LXModel column : Apotheneum.cube.exterior.columns) {
+      for (Apotheneum.Column column : Apotheneum.cube.exterior.columns) {
         renderColumn(column, cylinderIndex, level);
       }
       copyCubeExterior();
@@ -239,7 +238,7 @@ public class Surfacing extends ApotheneumPattern implements UIDeviceControls<Sur
     return this.cylinderLevels[cylinderIndex];
   }
 
-  private void renderColumn(LXModel column, int cylinderIndex, double level) {
+  private void renderColumn(Apotheneum.Column column, int cylinderIndex, double level) {
     final LXPoint c = column.points[0];
 
     final float xn =

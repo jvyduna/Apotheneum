@@ -160,7 +160,7 @@ public abstract class Bursts extends ApotheneumPattern implements ApotheneumPatt
 
   protected class Burst {
 
-    private final LXModel[] columns;
+    private final Apotheneum.Column[] columns;
     private float basis;
     private final float xn;
     private final float yn;
@@ -181,7 +181,7 @@ public abstract class Bursts extends ApotheneumPattern implements ApotheneumPatt
       this(orientation.columns(), null);
     }
 
-    protected Burst(LXModel[] columns, Burst copy) {
+    protected Burst(Apotheneum.Column[] columns, Burst copy) {
       this.columns = columns;
 
       if (copy != null) {
@@ -234,7 +234,7 @@ public abstract class Bursts extends ApotheneumPattern implements ApotheneumPatt
         final float wrapOffset = wrap ? 0 : 1;
 
         int x = 0;
-        for (LXModel column : this.columns) {
+        for (Apotheneum.Column column : this.columns) {
           int y = 0;
           for (LXPoint p : column.points) {
             float pxn = x / (this.columns.length - wrapOffset);

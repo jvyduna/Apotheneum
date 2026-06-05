@@ -12,7 +12,6 @@ import heronarts.lx.LXDeviceComponent;
 import heronarts.lx.LXLayer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNoteOn;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -67,7 +66,7 @@ public class CubeBlinks extends ApotheneumPattern implements LXDeviceComponent.M
       final double releaseLevel = LXUtils.lerp(1, 0, Math.pow(this.basis, this.releaseShape));
 
       int ci = 0;
-      for (LXModel column : this.face.columns) {
+      for (Apotheneum.Column column : this.face.columns) {
         final float xn = ci / (Apotheneum.GRID_WIDTH-1f);
         int pi = 0;
         for (LXPoint p : column.points) {

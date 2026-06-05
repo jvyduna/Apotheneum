@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
@@ -250,7 +249,7 @@ public class ApotheneumTest extends ApotheneumPattern implements UIDeviceControl
 
   private static final int NET_WIDTH = 10;
 
-  private void renderColumn(Apotheneum.Orientation orientation, LXModel column, int columnIndex) {
+  private void renderColumn(Apotheneum.Orientation orientation, Apotheneum.Column column, int columnIndex) {
     switch (this.mode.getEnum()) {
     case HORIZONTAL_STRIPE -> renderHorizontal(orientation, column, columnIndex);
     case VERTICAL_STRIPE -> renderVertical(orientation, column, columnIndex);
@@ -259,7 +258,7 @@ public class ApotheneumTest extends ApotheneumPattern implements UIDeviceControl
     }
   }
 
-  private void renderGradient(Apotheneum.Orientation orientation, LXModel column, int columnIndex) {
+  private void renderGradient(Apotheneum.Orientation orientation, Apotheneum.Column column, int columnIndex) {
     final int height = orientation.available(columnIndex);
     switch (columnIndex % NET_WIDTH) {
       case 0 -> {
@@ -307,7 +306,7 @@ public class ApotheneumTest extends ApotheneumPattern implements UIDeviceControl
     }
   }
 
-  private void renderHorizontal(Apotheneum.Orientation orientation, LXModel column, int columnIndex) {
+  private void renderHorizontal(Apotheneum.Orientation orientation, Apotheneum.Column column, int columnIndex) {
     final int stripeY = this.stripeY.getValuei();
     final int color = this.color.getEnum().color;
     int py = 0;
@@ -319,13 +318,13 @@ public class ApotheneumTest extends ApotheneumPattern implements UIDeviceControl
     }
   }
 
-  private void renderVertical(Apotheneum.Orientation orientation, LXModel column, int columnIndex) {
+  private void renderVertical(Apotheneum.Orientation orientation, Apotheneum.Column column, int columnIndex) {
     if (columnIndex % 10 == this.stripeX.getValuei()) {
       setColor(column, this.color.getEnum().color);
     }
   }
 
-  private void renderDMX(Apotheneum.Orientation orientation, LXModel column, int columnIndex) {
+  private void renderDMX(Apotheneum.Orientation orientation, Apotheneum.Column column, int columnIndex) {
 
     final int perStrand = orientation.available(columnIndex);
     final int strandIndex = columnIndex % 10;
@@ -353,7 +352,7 @@ public class ApotheneumTest extends ApotheneumPattern implements UIDeviceControl
 
   private void render(Apotheneum.Orientation orientation) {
     int columnIndex = 0;
-    for (LXModel column : orientation.columns()) {
+    for (Apotheneum.Column column : orientation.columns()) {
       renderColumn(orientation, column, columnIndex++);
     }
   }

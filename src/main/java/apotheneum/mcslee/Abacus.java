@@ -27,7 +27,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.Damper;
 import heronarts.lx.parameter.CompoundDiscreteParameter;
@@ -89,7 +88,7 @@ public class Abacus extends ApotheneumPattern {
 
     private final int NUM_BEADS = 7;
     private final BeadMetrics metrics;
-    private final LXModel[] columns;
+    private final Apotheneum.Column[] columns;
     private final CompoundDiscreteParameter placeValue;
     private final int xPos;
 
@@ -103,7 +102,7 @@ public class Abacus extends ApotheneumPattern {
       this(orientation.columns, CYLINDER_METRICS, placeValue, xPos);
     }
 
-    private Digit(LXModel[] columns, BeadMetrics metrics, CompoundDiscreteParameter placeValue, int xPos) {
+    private Digit(Apotheneum.Column[] columns, BeadMetrics metrics, CompoundDiscreteParameter placeValue, int xPos) {
       this.columns = columns;
       this.metrics = metrics;
       this.placeValue = placeValue;
@@ -137,7 +136,7 @@ public class Abacus extends ApotheneumPattern {
         int pos = (int) Math.round(this.base[i] - this.dampers.get(i).getValue() * this.metrics.beadShift);
 
         for (int x = 0; x < this.metrics.beadWidth; ++x) {
-          final LXModel column = this.columns[this.xPos+x];
+          final Apotheneum.Column column = this.columns[this.xPos+x];
           int yMin = 0, yMax = BEAD_HEIGHT;
           if (x == 0 || x == this.metrics.beadWidth - 1) {
             ++yMin;
@@ -174,7 +173,7 @@ public class Abacus extends ApotheneumPattern {
     // NB: the exterior front is used to render, whether or not it's in the view,
     // so make sure that we black it out!
     setColor(Apotheneum.cube.exterior.front.model, LXColor.BLACK);
-    for (LXModel column : Apotheneum.cylinder.exterior.columns) {
+    for (Apotheneum.Column column : Apotheneum.cylinder.exterior.columns) {
       setColor(column, LXColor.BLACK);
     }
 
