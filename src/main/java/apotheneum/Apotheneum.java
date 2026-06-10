@@ -69,24 +69,43 @@ public class Apotheneum {
   /**
    * One surface in Apotheneum that contains a grid of columns and rings (or rows)
    */
-  public interface Surface {
-    public Column[] columns();
-    public HorizontalSequence[] rings();
+  public abstract static class Surface {
+
+    public abstract Column[] columns();
+    public abstract HorizontalSequence[] rings();
+
+    public Column column(int index) {
+      return column(index, false);
+    }
+
+    public Column column(int index, boolean wrap) {
+      if (wrap) {
+        return columns()[LXUtils.wrap(index, 0, columns().length - 1)];
+      } else {
+        return columns()[index];
+      }
+    }
+
+    public HorizontalSequence ring(int index) {
+      return rings()[index];
+    }
+
+    public HorizontalSequence ring(int index, boolean wrap) {
+      if (wrap) {
+        return rings()[LXUtils.wrap(index, 0, rings().length - 1)];
+      } else {
+        return rings()[index];
+      }
+    }
   }
 
-  public abstract static class Orientation implements Surface {
+  public abstract static class Orientation extends Surface {
 
     public static final int EXTERIOR = 0;
     public static final int INTERIOR = 1;
 
-    public abstract Column[] columns();
-
     public LXPoint point(int x, int y) {
       return column(x).points[y];
-    }
-
-    public Column column(int index) {
-      return columns()[index];
     }
 
     @Override
@@ -94,8 +113,14 @@ public class Apotheneum {
 
     public abstract int available(int columnIndex);
 
+    @Override
     public Ring ring(int index) {
-      return rings()[index];
+      return (Ring) super.ring(index);
+    }
+
+    @Override
+    public Ring ring(int index, boolean wrap) {
+      return (Ring) super.ring(index, wrap);
     }
 
     public int width() {
@@ -121,6 +146,12 @@ public class Apotheneum {
       this.index = index;
       this.points = points;
     }
+
+    public abstract Sequence next();
+    public abstract Sequence next(boolean wrap);
+    public abstract Sequence previous();
+    public abstract Sequence previous(boolean wrap);
+
   }
 
   /**
@@ -152,6 +183,26 @@ public class Apotheneum {
       }
       return columns;
     }
+
+    @Override
+    public Column next() {
+      return next(false);
+    }
+
+    @Override
+    public Column next(boolean wrap) {
+      return this.surface.column(this.index + 1, wrap);
+    }
+
+    @Override
+    public Column previous() {
+      return previous(false);
+    }
+
+    @Override
+    public Column previous(boolean wrap) {
+      return this.surface.column(this.index - 1, wrap);
+    }
   }
 
   public abstract static class HorizontalSequence extends Sequence {
@@ -174,6 +225,26 @@ public class Apotheneum {
 
     public Ring(Surface surface, int index, Column[] columns) {
       super(surface, index, columns);
+    }
+
+    @Override
+    public Ring next() {
+      return next(false);
+    }
+
+    @Override
+    public Ring next(boolean wrap) {
+      return (Ring) this.surface.ring(this.index + 1, wrap);
+    }
+
+    @Override
+    public Ring previous() {
+      return previous(false);
+    }
+
+    @Override
+    public Ring previous(boolean wrap) {
+      return (Ring) this.surface.ring(this.index - 1, wrap);
     }
   }
 
@@ -205,16 +276,16 @@ public class Apotheneum {
         this.columns = new Column[this.front.columns.length + this.right.columns.length + this.back.columns.length + this.left.columns.length];
         int cIndex = 0;
         for (Column column : this.front.columns) {
-          this.columns[cIndex++] = new Column(column.model, cIndex);
+          this.columns[cIndex++] = new Column(this, column.model, cIndex);
         }
         for (Column column : this.right.columns) {
-          this.columns[cIndex++] = new Column(column.model, cIndex);
+          this.columns[cIndex++] = new Column(this, column.model, cIndex);
         }
         for (Column column : this.back.columns) {
-          this.columns[cIndex++] = new Column(column.model, cIndex);
+          this.columns[cIndex++] = new Column(this, column.model, cIndex);
         }
         for (Column column : this.left.columns) {
-          this.columns[cIndex++] = new Column(column.model, cIndex);
+          this.columns[cIndex++] = new Column(this, column.model, cIndex);
         }
 
         this.rings = new Ring[this.columns[0].size];
@@ -249,7 +320,7 @@ public class Apotheneum {
 
     }
 
-    public static class Face implements Surface {
+    public static class Face extends Surface {
       public final Surface surface;
       public final LXModel model;
       public final Column[] columns;
@@ -290,6 +361,26 @@ public class Apotheneum {
 
       private Row(Surface surface, int index, Column[] columns) {
         super(surface, index, columns);
+      }
+
+      @Override
+      public Row next() {
+        return next(false);
+      }
+
+      @Override
+      public Row next(boolean wrap) {
+        return (Row) this.surface.ring(this.index + 1, wrap);
+      }
+
+      @Override
+      public Row previous() {
+        return previous(false);
+      }
+
+      @Override
+      public Row previous(boolean wrap) {
+        return (Row) this.surface.ring(this.index - 1, wrap);
       }
     }
 
