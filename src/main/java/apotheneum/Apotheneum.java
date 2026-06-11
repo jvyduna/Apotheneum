@@ -329,7 +329,7 @@ public class Apotheneum {
       private Face(Surface surface, LXModel face) {
         this.surface = surface;
         this.model = face;
-        this.columns = Column.arrayFrom(surface, face.children);
+        this.columns = Column.arrayFrom(this, face.children);
         this.rows = new Row[GRID_HEIGHT];
 
         if (this.columns.length != GRID_WIDTH) {
