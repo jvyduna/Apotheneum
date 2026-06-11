@@ -193,13 +193,18 @@ public class Apotheneum {
 
         this.columns = new Column[this.front.columns.length + this.right.columns.length + this.back.columns.length + this.left.columns.length];
         int cIndex = 0;
-        System.arraycopy(this.front.columns, 0, this.columns, cIndex, this.front.columns.length);
-        cIndex += this.front.columns.length;
-        System.arraycopy(this.right.columns, 0, this.columns, cIndex, this.right.columns.length);
-        cIndex += this.right.columns.length;
-        System.arraycopy(this.back.columns, 0, this.columns, cIndex, this.back.columns.length);
-        cIndex += this.back.columns.length;
-        System.arraycopy(this.left.columns, 0, this.columns, cIndex, this.left.columns.length);
+        for (Column column : this.front.columns) {
+          this.columns[cIndex++] = new Column(column.model, cIndex);
+        }
+        for (Column column : this.right.columns) {
+          this.columns[cIndex++] = new Column(column.model, cIndex);
+        }
+        for (Column column : this.back.columns) {
+          this.columns[cIndex++] = new Column(column.model, cIndex);
+        }
+        for (Column column : this.left.columns) {
+          this.columns[cIndex++] = new Column(column.model, cIndex);
+        }
 
         this.rings = new Ring[this.columns[0].size];
         for (int i = 0; i < this.rings.length; ++i) {
