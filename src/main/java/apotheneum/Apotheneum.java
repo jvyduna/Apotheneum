@@ -87,7 +87,7 @@ public class Apotheneum {
     }
 
     public HorizontalSequence ring(int index) {
-      return rings()[index];
+      return ring(index, false);
     }
 
     public HorizontalSequence ring(int index, boolean wrap) {
@@ -186,7 +186,7 @@ public class Apotheneum {
 
     @Override
     public Column next() {
-      return next(false);
+      return next(true);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class Apotheneum {
 
     @Override
     public Column previous() {
-      return previous(false);
+      return previous(true);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class Apotheneum {
 
     @Override
     public Ring next() {
-      return next(false);
+      return next(true);
     }
 
     @Override
@@ -239,7 +239,7 @@ public class Apotheneum {
 
     @Override
     public Ring previous() {
-      return previous(false);
+      return previous(true);
     }
 
     @Override
@@ -365,7 +365,7 @@ public class Apotheneum {
 
       @Override
       public Row next() {
-        return next(false);
+        return next(true);
       }
 
       @Override
@@ -375,7 +375,7 @@ public class Apotheneum {
 
       @Override
       public Row previous() {
-        return previous(false);
+        return previous(true);
       }
 
       @Override
